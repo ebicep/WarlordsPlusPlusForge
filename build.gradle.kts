@@ -23,6 +23,7 @@ plugins {
     id("net.minecraftforge.gradle") version "[6.0,6.2)"
     id("org.jetbrains.kotlin.jvm") version "1.8.22"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.22"
+    id("org.parchmentmc.librarian.forgegradle") version "1.+"
 }
 
 version = "1.20-0.1.0"
@@ -40,7 +41,7 @@ println(
 )
 
 minecraft {
-    mappings("official", "1.20")
+    mappings("parchment", "2023.06.26-1.20.1")
 
     accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
 
