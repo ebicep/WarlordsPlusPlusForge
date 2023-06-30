@@ -45,8 +45,14 @@ object GameStateManager {
     @SubscribeEvent
     fun onChat(event: ClientChatEvent) {
         val message = event.message
-        if (message == "TEST") {
-            OtherWarlordsPlayers.getOtherWarlordsPlayers()
+        when (message) {
+            "TEST" -> {
+                OtherWarlordsPlayers.getOtherWarlordsPlayers()
+            }
+
+            "PLAYERS" -> {
+                WarlordsPlusPlus.LOGGER.info(OtherWarlordsPlayers.playersMap)
+            }
         }
     }
 

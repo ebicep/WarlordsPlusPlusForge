@@ -9,10 +9,9 @@ import net.minecraftforge.client.event.RenderPlayerEvent
 object CooldownRenderer : RenderApiPlayer() {
 
     override fun render(event: RenderPlayerEvent.Post) {
-        //TODO fix transparency / depth / scaling
         val player = OtherWarlordsPlayers.playersMap[entity!!.uuid] ?: return
         poseStack {
-            translateX(-51.5)
+            translateX(-36.5)
             translateY(75.0)
             scale(.4)
 
@@ -47,15 +46,15 @@ object CooldownRenderer : RenderApiPlayer() {
                 translateY(.5)
                 renderRectXCentered(width + 2, 6f, Colors.BLACK)
             }
-            translateZ(-.1)
+            translateZ(.01)
             renderRectXCentered(width, 5f, Colors.GRAY)
             translateX(-width / 2 - .5)
-            translateZ(-.1)
+            translateZ(.01)
             renderRect(((player.currentEnergy.toDouble() / player.maxEnergy) * width).toFloat(), 5f, Colors.GOLD)
         }
         poseStack {
             translateY(39.5)
-            translateZ(-.1)
+            translateZ(.05)
             scale(1.5)
             player.currentEnergy.toString().drawCentered(color = Colors.GREEN)
         }
@@ -67,7 +66,7 @@ object CooldownRenderer : RenderApiPlayer() {
             translateX(5)
             translateY(-7)
             renderImage(70, 70, ImageRegistry.COOLDOWN)
-            translate(30, 45)
+            translate(-3.0, 45.0, .1)
             scale(4.2)
             val str = if (cooldown < 10) " $cooldown" else "$cooldown"
             str.draw()

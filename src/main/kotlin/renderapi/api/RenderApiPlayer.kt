@@ -4,6 +4,7 @@ import com.ebicep.warlordsplusplus.MODID
 import com.ebicep.warlordsplusplus.WarlordsPlusPlus
 import com.ebicep.warlordsplusplus.channel.CooldownRenderer
 import com.ebicep.warlordsplusplus.renderapi.test.RenderPlayerTest
+import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.math.Axis
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
@@ -31,11 +32,17 @@ abstract class RenderApiPlayer(val autoRotate: Boolean = true) : RenderApi<Rende
         poseStack {
             translate(0.0, entity!!.nameTagOffsetY.toDouble(), 0.0)
             if (autoRotate) {
-                poseStack!!.mulPose(Minecraft.getInstance().gameRenderer.mainCamera.rotation())
+                autoRotate(entity!!.x, entity!!.z)
+                //poseStack!!.mulPose(Minecraft.getInstance().gameRenderer.mainCamera.rotation().rotationZ(0f))
             }
             scaleForWorldRendering()
+            RenderSystem.enableDepthTest() // so that text doesnt look weird (semi transparent)
+            RenderSystem.enableBlend()
 
             render(e)
+
+            RenderSystem.disableDepthTest()
+            RenderSystem.disableBlend()
         }
     }
 

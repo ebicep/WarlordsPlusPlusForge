@@ -52,6 +52,7 @@ abstract class RenderApi<E : Event> : RenderHelper(), RenderBasics<E> {
             WarlordsPlusPlus.LOGGER.log(Level.ERROR, "Resource location for image ${image.name} is null")
             return
         }
+        RenderSystem.enableDepthTest() // so that text doesnt look weird (semi transparent)
         RenderSystem.setShader { GameRenderer.getPositionTexShader() }
         RenderSystem.setShaderTexture(0, resourceLocation)
         bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX)
@@ -93,6 +94,7 @@ abstract class RenderApi<E : Event> : RenderHelper(), RenderBasics<E> {
                 .endVertex()
         }
         tesselator.end()
+        RenderSystem.disableDepthTest()
     }
 
     fun renderImage(
@@ -108,6 +110,7 @@ abstract class RenderApi<E : Event> : RenderHelper(), RenderBasics<E> {
      * Draws a rectangle
      */
     fun renderRect(width: Float, height: Float, color: Colors, alpha: Int = 255, z: Float = 0f) {
+        RenderSystem.enableDepthTest()
         RenderSystem.setShader { GameRenderer.getPositionColorShader() }
         bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR)
         val pPose = poseStack!!.last().pose()
@@ -128,9 +131,11 @@ abstract class RenderApi<E : Event> : RenderHelper(), RenderBasics<E> {
             .color(color, alpha)
             .endVertex()
         tesselator.end()
+        RenderSystem.disableDepthTest()
     }
 
     fun renderRectXCentered(width: Float, height: Float, color: Colors, alpha: Int = 255, z: Float = 0f) {
+        RenderSystem.enableDepthTest()
         RenderSystem.setShader { GameRenderer.getPositionColorShader() }
         bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR)
         val pPose = poseStack!!.last().pose()
@@ -152,6 +157,7 @@ abstract class RenderApi<E : Event> : RenderHelper(), RenderBasics<E> {
             .color(color, alpha)
             .endVertex()
         tesselator.end()
+        RenderSystem.disableDepthTest()
     }
 
     fun VertexConsumer.color(color: Colors, alpha: Int = 255): VertexConsumer {
@@ -163,7 +169,7 @@ abstract class RenderApi<E : Event> : RenderHelper(), RenderBasics<E> {
     fun String.width(): Int =
         font.width(this)
 
-    fun String.draw(seeThruBlocks: Boolean = false, shadow: Boolean = false, pX: Float = 0f) {
+    fun String.draw(seeThruBlocks: Boolean = false, shadow: Boolean = false, pX: Float = 0f, color: Colors = Colors.WHITE) {
         if (seeThruBlocks) {
             RenderSystem.disableDepthTest()
             RenderSystem.depthMask(true)
@@ -173,7 +179,7 @@ abstract class RenderApi<E : Event> : RenderHelper(), RenderBasics<E> {
             this,
             pX,
             0f,
-            0xFFFFFF,
+            color.FULL,
             shadow,
             poseStack!!.last().pose(),
             bufferSource,
@@ -187,12 +193,12 @@ abstract class RenderApi<E : Event> : RenderHelper(), RenderBasics<E> {
         }
     }
 
-    fun String.drawLeft(seeThruBlocks: Boolean = false, shadow: Boolean = false) {
-        draw(seeThruBlocks, shadow, -this.width().toFloat())
+    fun String.drawLeft(seeThruBlocks: Boolean = false, shadow: Boolean = false, color: Colors = Colors.WHITE) {
+        draw(seeThruBlocks, shadow, -this.width().toFloat(), color)
     }
 
-    fun String.drawCentered(seeThruBlocks: Boolean = false, shadow: Boolean = false, color: Colors? = null) {
-        draw(seeThruBlocks, shadow, -this.width() / 2.toFloat())
+    fun String.drawCentered(seeThruBlocks: Boolean = false, shadow: Boolean = false, color: Colors = Colors.WHITE) {
+        draw(seeThruBlocks, shadow, -this.width() / 2.toFloat(), color)
     }
 
     fun String.drawWithBackground(backgroundColor: Colors, alpha: Int = 255, padding: Int = 1) {

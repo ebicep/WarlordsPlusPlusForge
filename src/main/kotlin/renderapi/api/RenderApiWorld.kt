@@ -3,6 +3,7 @@ package com.ebicep.warlordsplusplus.renderapi.api
 import com.ebicep.warlordsplusplus.MODID
 import com.ebicep.warlordsplusplus.WarlordsPlusPlus
 import com.ebicep.warlordsplusplus.renderapi.test.RenderWorldTest
+import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.math.Axis
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
@@ -22,8 +23,13 @@ abstract class RenderApiWorld : RenderApi<RenderLevelStageEvent>() {
         poseStack {
 
             scaleForWorldRendering()
+            RenderSystem.enableDepthTest() // so that text doesnt look weird (semi transparent)
+            RenderSystem.enableBlend()
 
             render(e)
+
+            RenderSystem.disableDepthTest()
+            RenderSystem.disableBlend()
         }
     }
 

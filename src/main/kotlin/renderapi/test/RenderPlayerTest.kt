@@ -6,10 +6,10 @@ import net.minecraftforge.client.event.RenderPlayerEvent
 object RenderPlayerTest : RenderApiPlayer() {
 
     override fun render(event: RenderPlayerEvent.Post) {
-        poseStack {
-            translateY(20)
-            "TESTTETETETE".drawCentered()
-        }
+//        poseStack {
+//            translateY(20)
+//            "TESTTETETETE".drawCentered()
+//        }
     }
 
 }
