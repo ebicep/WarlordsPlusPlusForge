@@ -2,6 +2,7 @@ package com.ebicep.warlordsplusplus.renderapi.api
 
 import com.ebicep.warlordsplusplus.MODID
 import com.ebicep.warlordsplusplus.WarlordsPlusPlus
+import com.ebicep.warlordsplusplus.channel.CooldownRenderer
 import com.ebicep.warlordsplusplus.renderapi.test.RenderPlayerTest
 import com.mojang.math.Axis
 import net.minecraft.client.Minecraft
@@ -59,6 +60,7 @@ abstract class RenderApiPlayer(val autoRotate: Boolean = true) : RenderApi<Rende
 
         init {
             toRender.add(RenderPlayerTest)
+            toRender.add(CooldownRenderer)
             WarlordsPlusPlus.LOGGER.log(
                 Level.INFO,
                 "RenderApiPlayer registered ${toRender.size} renderers: ${toRender.joinToString { it::class.simpleName!! }}"

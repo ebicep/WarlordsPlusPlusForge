@@ -1,24 +1,54 @@
 package com.ebicep.warlordsplusplus.game
 
 import com.ebicep.warlordsplusplus.MODID
+import com.ebicep.warlordsplusplus.WarlordsPlusPlus
+import com.ebicep.warlordsplusplus.events.WarlordsEvents
 import com.ebicep.warlordsplusplus.util.ScoreboardUtils
 import net.minecraft.client.Minecraft
 import net.minecraft.world.scores.PlayerTeam
+import net.minecraftforge.client.event.ClientChatEvent
+import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.event.TickEvent
 import net.minecraftforge.event.TickEvent.ClientTickEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
+import org.apache.logging.log4j.Level
+import thedarkcolour.kotlinforforge.forge.FORGE_BUS
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 object GameStateManager {
 
     val scoreboardTeamCheck = "team_" // for checking valid sidebar teams
     var inWarlords = false
+    var inWarlords2 = false
     val inPvP: Boolean
         get() = currentGameMode != GameModes.NONE && GameModes.isPvP(currentGameMode)
     val inPvE: Boolean
         get() = currentGameMode != GameModes.NONE && !inPvP
     var currentGameMode: GameModes? = null
+
+
+    @SubscribeEvent
+    fun onChat(event: ClientChatReceivedEvent.System) {
+        val message = event.message
+        val unformattedText = ScoreboardUtils.getUnformattedText(message)
+        if (
+            unformattedText == "The gates will fall in 1 second!" ||
+            (inWarlords2 && unformattedText == "The game starts in 1 second!")
+        ) {
+            FORGE_BUS.post(WarlordsEvents.ResetEvent())
+            WarlordsPlusPlus.LOGGER.log(Level.DEBUG, "Posted ResetEvent")
+        }
+
+    }
+
+    @SubscribeEvent
+    fun onChat(event: ClientChatEvent) {
+        val message = event.message
+        if (message == "TEST") {
+            OtherWarlordsPlayers.getOtherWarlordsPlayers()
+        }
+    }
 
     @SubscribeEvent
     fun onClientTick(event: ClientTickEvent) {
@@ -27,7 +57,8 @@ object GameStateManager {
         }
         val scoreboard = Minecraft.getInstance().player?.scoreboard ?: return
         val sidebarObjective = scoreboard.getDisplayObjective(1) ?: return
-        inWarlords = ScoreboardUtils.getUnformattedText(sidebarObjective.displayName).equals("WARLORDS", ignoreCase = true)
+        inWarlords = ScoreboardUtils.getUnformattedText(sidebarObjective.displayName).contains("WARLORDS", ignoreCase = true)
+        inWarlords2 = ScoreboardUtils.getUnformattedText(sidebarObjective.displayName).contains("WARLORDS 2.0", ignoreCase = true)
         if (!inWarlords) {
             currentGameMode = GameModes.NONE
             return

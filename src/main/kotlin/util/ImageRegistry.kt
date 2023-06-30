@@ -6,6 +6,11 @@ import net.minecraft.resources.ResourceLocation
 enum class ImageRegistry(path: String) {
 
     WEIRDCHAMP("/images/weirdchamp.png"),
+    RED_ABILITY("/images/abilityicons/redability.png"),
+    PURPLE_ABILITY("/images/abilityicons/purpleability.png"),
+    BLUE_ABILITY("/images/abilityicons/blueability.png"),
+    ORANGE_ABILITY("/images/abilityicons/orangeability.png"),
+    COOLDOWN("/images/abilityicons/cooldown.png"),
 
     ;
 

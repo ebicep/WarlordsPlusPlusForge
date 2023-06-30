@@ -33,7 +33,7 @@ object ScoreboardUtils {
         if (relativeLine < 0) {
             return false
         }
-        if (relativeLine > teams.size) {
+        if (relativeLine >= teams.size) {
             return false
         }
         return getUnformattedText(teams[relativeLine]).contains(text)
