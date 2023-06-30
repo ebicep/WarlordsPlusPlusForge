@@ -26,6 +26,8 @@ object GameStateManager {
     val inPvE: Boolean
         get() = currentGameMode != GameModes.NONE && !inPvP
     var currentGameMode: GameModes? = null
+    var inGame: Boolean = false
+        get() = currentGameMode != GameModes.NONE
 
 
     @SubscribeEvent
@@ -99,7 +101,7 @@ object GameStateManager {
         //INTERCEPTION,
         WAVE_DEFENSE {
             override fun isCurrent(sidebar: List<PlayerTeam>): Boolean {
-                return ScoreboardUtils.containsAt(sidebar, "Wave", 11)
+                return ScoreboardUtils.containsAtAnywhere(sidebar, "Wave")
             }
         },
         ONSLAUGHT {

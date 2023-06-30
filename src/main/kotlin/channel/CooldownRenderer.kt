@@ -1,12 +1,21 @@
 package com.ebicep.warlordsplusplus.channel
 
+import com.ebicep.warlordsplusplus.game.GameStateManager
 import com.ebicep.warlordsplusplus.game.OtherWarlordsPlayers
 import com.ebicep.warlordsplusplus.renderapi.api.RenderApiPlayer
 import com.ebicep.warlordsplusplus.util.Colors
 import com.ebicep.warlordsplusplus.util.ImageRegistry
+import net.minecraft.client.Minecraft
 import net.minecraftforge.client.event.RenderPlayerEvent
 
 object CooldownRenderer : RenderApiPlayer() {
+
+    override fun shouldRender(event: RenderPlayerEvent.Post): Boolean {
+        return GameStateManager.inWarlords2 &&
+                GameStateManager.inGame &&
+                (event.entity != Minecraft.getInstance().player) &&
+                (GameStateManager.inPvE || !OtherWarlordsPlayers.playersMap.containsKey(Minecraft.getInstance().player?.uuid))
+    }
 
     override fun render(event: RenderPlayerEvent.Post) {
         val player = OtherWarlordsPlayers.playersMap[entity!!.uuid] ?: return
@@ -15,29 +24,13 @@ object CooldownRenderer : RenderApiPlayer() {
             translateY(75.0)
             scale(.4)
 
-            if (player.redCooldown == 0) {
-                renderImage(75, 75, ImageRegistry.RED_ABILITY)
-            } else {
-                drawCooldown(player.redCooldown)
-            }
+            drawAbility(player.redCooldown, ImageRegistry.RED_ABILITY)
             translateX(60)
-            if (player.purpleCooldown == 0) {
-                renderImage(75, 75, ImageRegistry.PURPLE_ABILITY)
-            } else {
-                drawCooldown(player.purpleCooldown)
-            }
+            drawAbility(player.purpleCooldown, ImageRegistry.PURPLE_ABILITY)
             translateX(60)
-            if (player.blueCooldown == 0) {
-                renderImage(75, 75, ImageRegistry.BLUE_ABILITY)
-            } else {
-                drawCooldown(player.blueCooldown)
-            }
+            drawAbility(player.blueCooldown, ImageRegistry.BLUE_ABILITY)
             translateX(60)
-            if (player.orangeCooldown == 0) {
-                renderImage(75, 75, ImageRegistry.ORANGE_ABILITY)
-            } else {
-                drawCooldown(player.orangeCooldown)
-            }
+            drawAbility(player.orangeCooldown, ImageRegistry.ORANGE_ABILITY)
         }
         poseStack {
             translateY(37)
@@ -60,7 +53,15 @@ object CooldownRenderer : RenderApiPlayer() {
         }
     }
 
-    fun drawCooldown(cooldown: Int) {
+    private fun drawAbility(cooldown: Int, image: ImageRegistry) {
+        if (cooldown == 0) {
+            renderImage(75, 75, image)
+        } else {
+            renderCooldown(cooldown)
+        }
+    }
+
+    private fun renderCooldown(cooldown: Int) {
         poseStack {
             scale(.9)
             translateX(5)
