@@ -121,14 +121,10 @@ object GameStateManager {
 
         companion object {
             fun isPvP(gameMode: GameModes?): Boolean {
-                if (gameMode == null) {
-                    return false
-                }
-                when (gameMode) {
+                return when (gameMode) {
                     CTF, TDM, DOM -> true
                     else -> false
                 }
-                return false
             }
         }
     }
