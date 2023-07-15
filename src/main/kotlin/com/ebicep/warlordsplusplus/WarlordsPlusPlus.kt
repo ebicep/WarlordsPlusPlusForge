@@ -2,6 +2,7 @@ package com.ebicep.warlordsplusplus
 
 import com.ebicep.warlordsplusplus.channel.WarlordsPvEPacketHandler
 import com.ebicep.warlordsplusplus.game.OtherWarlordsPlayers
+import com.ebicep.warlordsplusplus.renderapi.api.RenderApiGui
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
 import net.minecraft.commands.CommandSourceStack
 import net.minecraft.commands.Commands
@@ -24,6 +25,7 @@ object WarlordsPlusPlus {
     init {
         LOGGER.log(Level.INFO, "$MODID has started!")
         MOD_BUS.addListener(this::onClientSetup)
+        MOD_BUS.addListener(RenderApiGui::onGuiRegister)
         FORGE_BUS.addListener(this::onRegisterCommands)
     }
 

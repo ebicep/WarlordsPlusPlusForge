@@ -90,8 +90,8 @@ enum class Specialization(
 
     ;
 
-//    val icon
-//        get() = type.coloredSymbol
+    val icon
+        get() = type.coloredSymbol
 }
 
 enum class SpecType(val specName: String, val symbol: String, val color: ChatFormatting) {
@@ -100,5 +100,5 @@ enum class SpecType(val specName: String, val symbol: String, val color: ChatFor
     HEALER("healer", "銀", ChatFormatting.GREEN),
     NONE("NONE", "", ChatFormatting.OBFUSCATED);
 
-//    val coloredSymbol = "$color$symbol" //TODO
+    val coloredSymbol = "$color$symbol" //TODO
 }

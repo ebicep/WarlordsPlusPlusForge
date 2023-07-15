@@ -72,7 +72,11 @@ object GameStateManager {
                 name.substring(name.indexOf("_") + 1).toInt()
             }
         currentGameMode = GameModes.values().first { it.isCurrent(sortedTeams) }
-        time = currentGameMode.getTime(sortedTeams)
+        try {
+            time = currentGameMode.getTime(sortedTeams)
+        } catch (e: Exception) {
+            WarlordsPlusPlus.LOGGER.error("Error getting time", e)
+        }
     }
 
     enum class GameModes {
@@ -82,7 +86,7 @@ object GameStateManager {
             }
 
             override fun getTime(sidebar: List<PlayerTeam>): Pair<Int, Int>? {
-                return getTimePvP(sidebar, 9)
+                return getTimePvP(sidebar, 10)
             }
         },
         TDM {
@@ -91,7 +95,7 @@ object GameStateManager {
             }
 
             override fun getTime(sidebar: List<PlayerTeam>): Pair<Int, Int>? {
-                return getTimePvP(sidebar, 6)
+                return getTimePvP(sidebar, 7)
             }
         },
         DOM {
@@ -100,7 +104,7 @@ object GameStateManager {
             }
 
             override fun getTime(sidebar: List<PlayerTeam>): Pair<Int, Int>? {
-                return getTimePvP(sidebar, 9)
+                return getTimePvP(sidebar, 10)
             }
         },
 

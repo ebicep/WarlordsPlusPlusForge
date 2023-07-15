@@ -135,6 +135,14 @@ abstract class RenderApi<E : Event> : RenderHelper(), RenderBasics<E> {
         RenderSystem.disableDepthTest()
     }
 
+    fun renderRect(width: Int, height: Int, color: Colors, alpha: Int = 255, z: Float = 0f) {
+        renderRect(width.toFloat(), height.toFloat(), color, alpha, z)
+    }
+
+    fun renderRect(width: Double, height: Double, color: Colors, alpha: Int = 255, z: Float = 0f) {
+        renderRect(width.toFloat(), height.toFloat(), color, alpha, z)
+    }
+
     fun renderRectXCentered(width: Float, height: Float, color: Colors, alpha: Int = 255, z: Float = 0f) {
         RenderSystem.enableDepthTest()
         RenderSystem.setShader { GameRenderer.getPositionColorShader() }

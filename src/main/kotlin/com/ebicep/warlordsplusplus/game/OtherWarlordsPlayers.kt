@@ -27,6 +27,15 @@ open class OtherWarlordsPlayer(val name: String, val uuid: UUID) {
     var level = 0
     var left: Boolean = false
 
+    //TODO
+    var died: Int = 0
+    var stoleKill: Int = 0
+    var picks: Int = 0
+    var returns: Int = 0
+    var caps: Int = 0
+    var isDead: Boolean = false
+    var respawn: Int = -1
+
     var currentEnergy: Int = 0
     var maxEnergy: Int = 0
     var redCooldown: Int = 0
