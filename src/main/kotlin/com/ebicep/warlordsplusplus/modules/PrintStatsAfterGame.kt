@@ -48,7 +48,7 @@ object PrintStatsAfterGame {
         val onSameTeam = playerTeam == player.team
         val otherTeam = if (player.team == Team.BLUE) Team.RED else Team.BLUE
         val teamColor = player.team.color
-        return Component.empty()
+        val component = Component.empty()
             .append(player.getInfoPrefix())
             .append(Component.literal(" "))
             .append(Component.literal(player.name)
@@ -58,7 +58,8 @@ object PrintStatsAfterGame {
             .append(Component.literal(player.kills.toString())
                 .withStyle { it.withColor(ChatFormatting.GREEN) }
             )
-            .append(Component.literal(":")
+            .append(
+                Component.literal(":")
                 .withStyle { it.withColor(ChatFormatting.WHITE) }
             )
             .append(Component.literal(player.deaths.toString())
@@ -86,27 +87,37 @@ object PrintStatsAfterGame {
                             .withStyle { it.withColor(ChatFormatting.DARK_RED) })
                 }
             )
-            .append(WHITE_SPACER)
-            .append(Component.literal("Picks: ")
-                .withStyle { it.withColor(ChatFormatting.GOLD) }
-                .append(Component.literal(player.picks.toString())
-                    .withStyle { it.withColor(ChatFormatting.GREEN) }
+        if (player.picks > 0) {
+            component
+                .append(WHITE_SPACER)
+                .append(Component.literal("Picks: ")
+                    .withStyle { it.withColor(ChatFormatting.GOLD) }
+                    .append(Component.literal(player.picks.toString())
+                        .withStyle { it.withColor(ChatFormatting.GREEN) }
+                    )
                 )
-            )
-            .append(WHITE_SPACER)
-            .append(Component.literal("Caps: ")
-                .withStyle { it.withColor(ChatFormatting.GOLD) }
-                .append(Component.literal(player.caps.toString())
-                    .withStyle { it.withColor(otherTeam.color) }
+        }
+        if (player.caps > 0) {
+            component
+                .append(WHITE_SPACER)
+                .append(Component.literal("Caps: ")
+                    .withStyle { it.withColor(ChatFormatting.GOLD) }
+                    .append(Component.literal(player.caps.toString())
+                        .withStyle { it.withColor(otherTeam.color) }
+                    )
                 )
-            )
-            .append(WHITE_SPACER)
-            .append(Component.literal("Returns: ")
-                .withStyle { it.withColor(ChatFormatting.GOLD) }
-                .append(Component.literal(player.returns.toString())
-                    .withStyle { it.withColor(teamColor) }
+        }
+        if (player.returns > 0) {
+            component
+                .append(WHITE_SPACER)
+                .append(Component.literal("Returns: ")
+                    .withStyle { it.withColor(ChatFormatting.GOLD) }
+                    .append(Component.literal(player.returns.toString())
+                        .withStyle { it.withColor(teamColor) }
+                    )
                 )
-            )
+        }
+        return component
     }
 
     var printGeneralStats = false
