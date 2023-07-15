@@ -9,7 +9,7 @@ object ScoreboardUtils {
         return Minecraft.getInstance().player?.scoreboard?.playerTeams?.firstOrNull { it.name.equals(name) }
     }
 
-    fun getUnformattedText(playerTeam: PlayerTeam): String {
+    private fun getUnformattedText(playerTeam: PlayerTeam): String {
         return playerTeam.playerPrefix.string + playerTeam.playerSuffix.string
     }
 
@@ -17,14 +17,21 @@ object ScoreboardUtils {
      * @param at represents sidebar number starting from bottom = 1 (basically read off sidebar)
      */
     fun containsAt(teams: List<PlayerTeam>, text: String, at: Int): Boolean {
+        getAt(teams, at)?.let {
+            return it.contains(text)
+        }
+        return false
+    }
+
+    fun getAt(teams: List<PlayerTeam>, at: Int): String? {
         val relativeLine = at - 1
         if (relativeLine < 0) {
-            return false
+            return null
         }
         if (relativeLine >= teams.size) {
-            return false
+            return null
         }
-        return getUnformattedText(teams[relativeLine]).contains(text)
+        return getUnformattedText(teams[relativeLine])
     }
 
     fun containsAtAnywhere(teams: List<PlayerTeam>, text: String): Boolean {

@@ -25,6 +25,7 @@ abstract class RenderApi<E : Event> : RenderHelper(), RenderBasics<E> {
 
     var event: E? = null
     var poseStack: PoseStack? = null
+
     override fun setUpRender(e: E) {
         event = e
         render(e)

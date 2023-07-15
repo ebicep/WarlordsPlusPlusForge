@@ -1,7 +1,7 @@
 package com.ebicep.warlordsplusplus.game
 
 import com.ebicep.warlordsplusplus.MODID
-import com.ebicep.warlordsplusplus.events.WarlordsEvents
+import com.ebicep.warlordsplusplus.events.WarlordsGameEvents
 import com.ebicep.warlordsplusplus.util.Specialization
 import com.ebicep.warlordsplusplus.util.Team
 import com.ebicep.warlordsplusplus.util.WarlordClass
@@ -82,7 +82,7 @@ object OtherWarlordsPlayers {
     }
 
     @SubscribeEvent
-    fun onReset(event: WarlordsEvents.ResetEvent) {
+    fun onReset(event: WarlordsGameEvents.ResetEvent) {
         playersMap.clear()
         getOtherWarlordsPlayers()
     }
