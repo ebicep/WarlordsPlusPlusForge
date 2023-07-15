@@ -15,6 +15,7 @@ import net.minecraftforge.client.event.RenderPlayerEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
 import org.apache.logging.log4j.Level
+import org.joml.Quaternionf
 
 abstract class RenderApiPlayer(val autoRotate: Boolean = true) : RenderApi<RenderPlayerEvent.Post>() {
 
@@ -32,8 +33,12 @@ abstract class RenderApiPlayer(val autoRotate: Boolean = true) : RenderApi<Rende
         poseStack {
             translate(0.0, entity!!.nameTagOffsetY.toDouble(), 0.0)
             if (autoRotate) {
-                autoRotate(entity!!.x, entity!!.z)
-                //poseStack!!.mulPose(Minecraft.getInstance().gameRenderer.mainCamera.rotation().rotationZ(0f))
+                val camera = Minecraft.getInstance().gameRenderer.mainCamera
+                poseStack!!.mulPose(
+                    Quaternionf()
+                        .rotationX(-0.017453292F * camera.xRot)
+                        .rotationY(-0.017453292F * camera.yRot)
+                )
             }
             scaleForWorldRendering()
             RenderSystem.enableDepthTest() // so that text doesnt look weird (semi transparent)
