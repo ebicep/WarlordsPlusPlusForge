@@ -13,7 +13,7 @@ const val YOU_DID = """»"""
 
 private val numberPattern = Pattern.compile("\\s[0-9]+\\s")
 
-object DamageAndHealParser : ChatParser() {
+object DamageAndHealParser : ChatParser {
 
     override fun onChatReceived(e: ClientChatReceivedEvent) {
         if (GameStateManager.notInGame) {

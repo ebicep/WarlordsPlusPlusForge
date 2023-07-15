@@ -1,9 +1,6 @@
 package com.ebicep.warlordsplusplus.modules
 
-import com.ebicep.warlordsplusplus.game.GameStateManager
-import com.ebicep.warlordsplusplus.game.OtherWarlordsPlayer
-import com.ebicep.warlordsplusplus.game.OtherWarlordsPlayers
-import com.ebicep.warlordsplusplus.game.WarlordsPlayer
+import com.ebicep.warlordsplusplus.game.*
 import com.ebicep.warlordsplusplus.renderapi.api.RenderApiGuiOverride
 import com.ebicep.warlordsplusplus.util.Colors
 import com.ebicep.warlordsplusplus.util.Team
@@ -61,11 +58,11 @@ object WarlordsPlusPlusScoreBoard : RenderApiGuiOverride(VanillaGuiOverlay.PLAYE
 
 
 
-        if (GameStateManager.currentGameMode == GameStateManager.GameModes.CTF || GameStateManager.currentGameMode == GameStateManager.GameModes.TDM) {
+        if (GameStateManager.currentGameMode == GameModes.CTF || GameStateManager.currentGameMode == GameModes.TDM) {
             poseStack!!.scale(setScaleCTFTDM.toFloat(), setScaleCTFTDM.toFloat(), 1f)
             xStart =
                 (xCenter + 50 - (setScaleCTFTDM.toDouble() * 100).toInt() / 2 - ((w * (setScaleCTFTDM.toDouble() * 100).toInt() / 100 / 2)))
-        } else if (GameStateManager.currentGameMode == GameStateManager.GameModes.DOM) {
+        } else if (GameStateManager.currentGameMode == GameModes.DOM) {
             poseStack!!.scale(setScaleDOM.toFloat(), setScaleDOM.toFloat(), 1f)
             xStart = (xCenter + 50 - (setScaleDOM.toDouble() * 100).toInt() / 2 - ((w * (setScaleDOM.toDouble() * 100).toInt() / 100 / 2)))
         }
@@ -225,14 +222,19 @@ object WarlordsPlusPlusScoreBoard : RenderApiGuiOverride(VanillaGuiOverlay.PLAYE
                 val isThePlayer = p.uuid == thePlayer.uuid
                 "${ChatFormatting.GOLD}${p.warlordClass.shortName}${ChatFormatting.RESET} ${isPrestige()}${level(p.level)} ${if (isThePlayer) WarlordsPlayer.spec.icon else p.spec.icon}".draw()
                 translateX(xName)
-                "${drawFlag()}${if (p.isDead) "${ChatFormatting.GRAY}${if (!GameStateManager.inWarlords2) "${p.respawn} " else ""}" else p.team.color.toString()}${if (p.left) "${ChatFormatting.GRAY}${ChatFormatting.STRIKETHROUGH}" else ""}${if (isThePlayer) ChatFormatting.GREEN else ""}${p.name}".draw()
+                "${drawFlag()}${
+                    if (p.isDead) "${ChatFormatting.GRAY}${if (!GameStateManager.inWarlords2) "${p.respawn} " else ""}" else p.team.color.toString()
+                }${
+                    if (p.left) "${ChatFormatting.GRAY}${ChatFormatting.STRIKETHROUGH}" else ""
+                }${
+                    if (isThePlayer) ChatFormatting.GREEN else ""
+                }${p.name}".draw()
                 translateX(xKills)
                 "${if (hasMostKills()) ChatFormatting.GOLD else ChatFormatting.RESET}${p.kills}".draw()
                 translateX(xDeaths)
                 "${if (hasMostDeaths()) ChatFormatting.DARK_RED else ChatFormatting.RESET}${p.deaths}".draw()
                 if (WarlordsPlayer.team == p.team) {
                     if (showDoneAndReceived) {
-
                         translateX(xDone)
                         "${ChatFormatting.GREEN}${p.healingReceived}".draw()
                         translateX(xReceived)
@@ -295,5 +297,5 @@ object WarlordsPlusPlusScoreBoard : RenderApiGuiOverride(VanillaGuiOverlay.PLAYE
     var showOutline = false
     var showDiedToYouStoleKill = false
     var showDoneAndReceived = true
-    var splitScoreBoard = false
+    var splitScoreBoard = true
 }

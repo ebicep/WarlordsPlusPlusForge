@@ -5,9 +5,9 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
 
-abstract class ChatParser {
+interface ChatParser {
 
-    open fun onChatReceived(e: ClientChatReceivedEvent) {
+    fun onChatReceived(e: ClientChatReceivedEvent) {
 
     }
 
@@ -24,6 +24,9 @@ abstract class ChatParser {
 
         @SubscribeEvent
         fun onChatMessage(e: ClientChatReceivedEvent) {
+            if (!e.isSystem) {
+                return
+            }
             parsers.forEach {
                 it.onChatReceived(e)
             }

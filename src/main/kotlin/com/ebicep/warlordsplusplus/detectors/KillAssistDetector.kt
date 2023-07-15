@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import thedarkcolour.kotlinforforge.forge.FORGE_BUS
 
-object KillAssistParser : ChatParser() {
+object KillAssistParser : ChatParser {
 
     override fun onChatReceived(e: ClientChatReceivedEvent) {
         if (GameStateManager.notInGame) {
