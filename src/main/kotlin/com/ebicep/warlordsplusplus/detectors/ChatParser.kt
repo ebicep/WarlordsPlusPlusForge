@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.Mod
 
 interface ChatParser {
 
-    fun onChatReceived(e: ClientChatReceivedEvent) {
+    fun onChatReceived(e: ClientChatReceivedEvent.System) {
 
     }
 
@@ -20,13 +20,11 @@ interface ChatParser {
             parsers.add(DamageAndHealParser)
             parsers.add(KillAssistParser)
             parsers.add(HitDetector)
+            parsers.add(GameEndDetector)
         }
 
         @SubscribeEvent
-        fun onChatMessage(e: ClientChatReceivedEvent) {
-            if (!e.isSystem) {
-                return
-            }
+        fun onChatMessage(e: ClientChatReceivedEvent.System) {
             parsers.forEach {
                 it.onChatReceived(e)
             }

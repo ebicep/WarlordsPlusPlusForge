@@ -6,8 +6,11 @@ import com.ebicep.warlordsplusplus.events.WarlordsPlayerEvents
 import com.ebicep.warlordsplusplus.util.Specialization
 import com.ebicep.warlordsplusplus.util.Team
 import com.ebicep.warlordsplusplus.util.WarlordClass
+import net.minecraft.ChatFormatting
 import net.minecraft.client.Minecraft
 import net.minecraft.client.multiplayer.PlayerInfo
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.MutableComponent
 import net.minecraft.world.scores.PlayerTeam
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
@@ -26,6 +29,7 @@ open class OtherWarlordsPlayer(val name: String, val uuid: UUID) {
     var spec = Specialization.NONE
     var team = Team.NONE
     var level = 0
+    var prestiged: Boolean = false
     var left: Boolean = false
 
     //TODO
@@ -43,6 +47,27 @@ open class OtherWarlordsPlayer(val name: String, val uuid: UUID) {
     var purpleCooldown: Int = 0
     var blueCooldown: Int = 0
     var orangeCooldown: Int = 0
+
+    // [MAG][80][+]
+    fun getInfoPrefix(): MutableComponent {
+        return Component.literal("")
+            .withStyle {
+                it.withColor(ChatFormatting.DARK_GRAY)
+            }
+            .append(Component.literal("["))
+            .append(Component.literal(warlordClass.shortName)
+                .withStyle {
+                    it.withColor(ChatFormatting.WHITE)
+                })
+            .append(Component.literal("]["))
+            .append(Component.literal(level.toString().padStart(2, '0'))
+                .withStyle {
+                    it.withColor(if (prestiged) ChatFormatting.GOLD else ChatFormatting.WHITE)
+                })
+            .append(Component.literal("]["))
+            .append(spec.iconComponent)
+            .append(Component.literal("]"))
+    }
 }
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)

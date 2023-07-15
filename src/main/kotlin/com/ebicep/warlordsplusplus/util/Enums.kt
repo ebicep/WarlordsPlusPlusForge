@@ -1,6 +1,7 @@
 package com.ebicep.warlordsplusplus.util
 
 import net.minecraft.ChatFormatting
+import net.minecraft.network.chat.Component
 
 enum class Team(val teamName: String, val color: ChatFormatting?) {
     BLUE("Blue", ChatFormatting.BLUE),
@@ -92,6 +93,8 @@ enum class Specialization(
 
     val icon
         get() = type.coloredSymbol
+    val iconComponent
+        get() = type.coloredSymbolComponent
 }
 
 enum class SpecType(val specName: String, val symbol: String, val color: ChatFormatting) {
@@ -101,4 +104,8 @@ enum class SpecType(val specName: String, val symbol: String, val color: ChatFor
     NONE("NONE", "", ChatFormatting.OBFUSCATED);
 
     val coloredSymbol = "$color$symbol" //TODO
+    val coloredSymbolComponent = Component.literal(symbol)
+        .withStyle {
+            it.withColor(ChatFormatting.WHITE)
+        }
 }

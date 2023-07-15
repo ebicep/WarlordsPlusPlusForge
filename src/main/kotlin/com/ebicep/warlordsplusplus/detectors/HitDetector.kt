@@ -5,9 +5,9 @@ import com.ebicep.warlordsplusplus.game.GameStateManager
 import net.minecraftforge.client.event.ClientChatReceivedEvent
 import thedarkcolour.kotlinforforge.forge.FORGE_BUS
 
-object HitDetector : ChatParser() {
+object HitDetector : ChatParser {
 
-    override fun onChatReceived(e: ClientChatReceivedEvent) {
+    override fun onChatReceived(e: ClientChatReceivedEvent.System) {
         if (GameStateManager.notInGame) {
             return
         }

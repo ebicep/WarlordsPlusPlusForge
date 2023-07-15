@@ -8,7 +8,7 @@ import thedarkcolour.kotlinforforge.forge.FORGE_BUS
 
 object KillAssistParser : ChatParser {
 
-    override fun onChatReceived(e: ClientChatReceivedEvent) {
+    override fun onChatReceived(e: ClientChatReceivedEvent.System) {
         if (GameStateManager.notInGame) {
             return
         }

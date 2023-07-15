@@ -35,10 +35,12 @@ object GameStateManager {
         get() = time?.second ?: 0
 
     @SubscribeEvent
+    fun onReset(event: WarlordsGameEvents.ResetEvent) {
+
+    }
+
+    @SubscribeEvent
     fun onChat(event: ClientChatReceivedEvent.System) {
-        if (!event.isSystem) {
-            return
-        }
         val message = event.message
         val unformattedText = message.string
         if (
@@ -48,7 +50,6 @@ object GameStateManager {
             FORGE_BUS.post(WarlordsGameEvents.ResetEvent())
             WarlordsPlusPlus.LOGGER.log(Level.DEBUG, "Posted ResetEvent")
         }
-
     }
 
     @SubscribeEvent
@@ -76,6 +77,9 @@ object GameStateManager {
         try {
             val oldTime = time
             time = currentGameMode.getTime(sortedTeams)
+            if (time == null) {
+                return
+            }
             if (oldTime?.first != time?.first) {
                 FORGE_BUS.post(WarlordsGameEvents.MinuteEvent(time!!.first))
             }

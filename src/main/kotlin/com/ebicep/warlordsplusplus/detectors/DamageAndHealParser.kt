@@ -15,7 +15,7 @@ private val numberPattern = Pattern.compile("\\s[0-9]+\\s")
 
 object DamageAndHealParser : ChatParser {
 
-    override fun onChatReceived(e: ClientChatReceivedEvent) {
+    override fun onChatReceived(e: ClientChatReceivedEvent.System) {
         if (GameStateManager.notInGame) {
             return
         }
