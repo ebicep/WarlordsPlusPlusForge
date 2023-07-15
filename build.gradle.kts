@@ -1,5 +1,3 @@
-import org.spongepowered.asm.gradle.plugins.MixinExtension
-import org.spongepowered.asm.gradle.plugins.struct.DynamicProperties
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -10,14 +8,15 @@ buildscript {
     }
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0-Beta")
-        classpath("org.spongepowered:mixingradle:0.7.+")
+//        classpath("org.spongepowered:mixingradle:0.7.+")
     }
 }
 
 apply(plugin = "kotlin")
-apply(plugin = "org.spongepowered.mixin")
+//apply(plugin = "org.spongepowered.mixin")
 
 plugins {
+    java
     idea
     `maven-publish`
     id("net.minecraftforge.gradle") version "[6.0,6.2)"
@@ -43,7 +42,7 @@ println(
 minecraft {
     mappings("parchment", "2023.06.26-1.20.1")
 
-    accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
+    //accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
 
     runs.all {
         mods {
@@ -91,21 +90,21 @@ repositories {
 
 dependencies {
     minecraft("net.minecraftforge:forge:1.20-46.0.1")
-    annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
+//    annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
     implementation("thedarkcolour:kotlinforforge:4.3.0")
 }
 
-val Project.mixin: MixinExtension
-    get() = extensions.getByType()
-
-mixin.run {
-    add(sourceSets.main.get(), "warlordsplusplus.mixins.refmap.json")
-    config("warlordsplusplus.mixins.json")
-    val debug = this.debug as DynamicProperties
-    debug.setProperty("verbose", true)
-    debug.setProperty("export", true)
-    setDebug(debug)
-}
+//val Project.mixin: MixinExtension
+//    get() = extensions.getByType()
+//
+//mixin.run {
+//    add(sourceSets.main.get(), "warlordsplusplus.mixins.refmap.json")
+//    config("warlordsplusplus.mixins.json")
+//    val debug = this.debug as DynamicProperties
+//    debug.setProperty("verbose", true)
+//    debug.setProperty("export", true)
+//    setDebug(debug)
+//}
 
 tasks.withType<Jar> {
     archiveBaseName.set(modid)

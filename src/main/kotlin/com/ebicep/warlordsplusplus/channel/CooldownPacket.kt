@@ -1,4 +1,4 @@
-package channel
+package com.ebicep.warlordsplusplus.channel
 
 import com.ebicep.warlordsplusplus.game.GameStateManager
 import com.ebicep.warlordsplusplus.game.OtherWarlordsPlayers

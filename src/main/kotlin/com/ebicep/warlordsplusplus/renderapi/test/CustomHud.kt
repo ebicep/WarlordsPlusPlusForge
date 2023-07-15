@@ -26,14 +26,14 @@ object CustomHud : IGuiOverlay {
         //guiGraphics.pose().pushPose()
         //guiGraphics.pose().scale(2f, 2f, 2f)
         //RenderSystem.setShader() { GameRenderer.getRendertypeTextShader()}
-        guiGraphics.drawString(
-            gui.font,
-            "Hello World! Hello World! Hello World! Hello World!",
-            screenWidth / 2,
-            screenHeight / 2,
-            0xFFFFFF,
-            false
-        )
+//        guiGraphics.drawString(
+//            gui.font,
+//            "Hello World! Hello World! Hello World! Hello World!",
+//            screenWidth / 2,
+//            screenHeight / 2,
+//            0xFFFFFF,
+//            false
+//        )
         //guiGraphics.pose().popPose()
     }
 

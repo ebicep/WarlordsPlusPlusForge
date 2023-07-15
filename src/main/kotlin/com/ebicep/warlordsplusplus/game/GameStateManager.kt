@@ -55,6 +55,7 @@ object GameStateManager {
             "PLAYERS" -> {
                 WarlordsPlusPlus.LOGGER.info(OtherWarlordsPlayers.playersMap)
             }
+
         }
     }
 

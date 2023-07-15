@@ -1,6 +1,5 @@
 package com.ebicep.warlordsplusplus.channel
 
-import channel.CooldownPacket
 import com.ebicep.warlordsplusplus.WarlordsPlusPlus
 import net.minecraft.resources.ResourceLocation
 import net.minecraftforge.network.NetworkRegistry
