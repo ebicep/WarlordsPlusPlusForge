@@ -37,6 +37,7 @@ object GameEndDetector : ChatParser {
             counter++
             if (counter > 0 && canPost) {
                 FORGE_BUS.post(WarlordsGameEvents.GameEndEvent())
+                canPost = false
             }
         }
     }
