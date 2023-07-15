@@ -2,7 +2,6 @@ package com.ebicep.warlordsplusplus.game
 
 import com.ebicep.warlordsplusplus.MODID
 import com.ebicep.warlordsplusplus.events.WarlordsEvents
-import com.ebicep.warlordsplusplus.util.ScoreboardUtils
 import com.ebicep.warlordsplusplus.util.Specialization
 import com.ebicep.warlordsplusplus.util.Team
 import com.ebicep.warlordsplusplus.util.WarlordClass
@@ -55,14 +54,14 @@ object OtherWarlordsPlayers {
                 false
             } else {
                 WarlordClass.values().any {
-                    ScoreboardUtils.getUnformattedText(playerTeam.playerPrefix).contains(it.shortName)
+                    playerTeam.playerPrefix.string.contains(it.shortName)
                 }
             }
         }.map { playerInfo ->
             val playerTeam: PlayerTeam = playerInfo.team!!
             val otherWarlordsPlayer = OtherWarlordsPlayer(playerInfo.profile.name, playerInfo.profile.id)
             otherWarlordsPlayer.warlordClass = WarlordClass.values().first {
-                ScoreboardUtils.getUnformattedText(playerTeam.playerPrefix).contains(it.shortName)
+                playerTeam.playerPrefix.string.contains(it.shortName)
             }
             otherWarlordsPlayer.team = Team.values().first {
                 playerTeam.color == it.color

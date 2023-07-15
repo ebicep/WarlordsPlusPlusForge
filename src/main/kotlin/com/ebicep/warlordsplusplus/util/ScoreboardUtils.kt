@@ -1,8 +1,6 @@
 package com.ebicep.warlordsplusplus.util
 
 import net.minecraft.client.Minecraft
-import net.minecraft.network.chat.Component
-import net.minecraft.network.chat.contents.LiteralContents
 import net.minecraft.world.scores.PlayerTeam
 
 object ScoreboardUtils {
@@ -12,17 +10,7 @@ object ScoreboardUtils {
     }
 
     fun getUnformattedText(playerTeam: PlayerTeam): String {
-        return getUnformattedText(playerTeam.playerPrefix) + getUnformattedText(playerTeam.playerSuffix)
-    }
-
-    fun getUnformattedText(components: Component): String {
-        return components.toFlatList().map {
-            it.contents
-        }.filterIsInstance<LiteralContents>().map {
-            it.text
-        }.joinToString("") {
-            it
-        }
+        return playerTeam.playerPrefix.string + playerTeam.playerSuffix.string
     }
 
     /**

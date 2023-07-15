@@ -33,7 +33,7 @@ object GameStateManager {
     @SubscribeEvent
     fun onChat(event: ClientChatReceivedEvent.System) {
         val message = event.message
-        val unformattedText = ScoreboardUtils.getUnformattedText(message)
+        val unformattedText = message.string
         if (
             unformattedText == "The gates will fall in 1 second!" ||
             (inWarlords2 && unformattedText == "The game starts in 1 second!")
@@ -66,8 +66,9 @@ object GameStateManager {
         }
         val scoreboard = Minecraft.getInstance().player?.scoreboard ?: return
         val sidebarObjective = scoreboard.getDisplayObjective(1) ?: return
-        inWarlords = ScoreboardUtils.getUnformattedText(sidebarObjective.displayName).contains("WARLORDS", ignoreCase = true)
-        inWarlords2 = ScoreboardUtils.getUnformattedText(sidebarObjective.displayName).contains("WARLORDS 2.0", ignoreCase = true)
+        val unformattedDisplayName = sidebarObjective.displayName.string
+        inWarlords = unformattedDisplayName.contains("WARLORDS", ignoreCase = true)
+        inWarlords2 = unformattedDisplayName.contains("WARLORDS 2.0", ignoreCase = true)
         if (!inWarlords) {
             currentGameMode = GameModes.NONE
             return
