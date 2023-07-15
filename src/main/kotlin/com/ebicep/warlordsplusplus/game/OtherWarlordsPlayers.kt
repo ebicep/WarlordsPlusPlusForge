@@ -2,6 +2,7 @@ package com.ebicep.warlordsplusplus.game
 
 import com.ebicep.warlordsplusplus.MODID
 import com.ebicep.warlordsplusplus.events.WarlordsGameEvents
+import com.ebicep.warlordsplusplus.events.WarlordsPlayerEvents
 import com.ebicep.warlordsplusplus.util.Specialization
 import com.ebicep.warlordsplusplus.util.Team
 import com.ebicep.warlordsplusplus.util.WarlordClass
@@ -94,5 +95,22 @@ object OtherWarlordsPlayers {
     fun onReset(event: WarlordsGameEvents.ResetEvent) {
         playersMap.clear()
         getOtherWarlordsPlayers()
+    }
+
+    @SubscribeEvent
+    fun onAbstractDamageHealEnergyEvent(event: WarlordsPlayerEvents.AbstractDamageHealEnergyEvent) {
+        when (event::class) {
+            WarlordsPlayerEvents.DamageDoneEvent::class ->
+                if (event.player in playersMap) playersMap[event.player]!!.damageDone += event.amount
+
+            WarlordsPlayerEvents.DamageTakenEvent::class ->
+                if (event.player in playersMap) playersMap[event.player]!!.damageReceived += event.amount
+
+            WarlordsPlayerEvents.HealingGivenEvent::class ->
+                if (event.player in playersMap) playersMap[event.player]!!.healingDone += event.amount
+
+            WarlordsPlayerEvents.HealingReceivedEvent::class ->
+                if (event.player in playersMap) playersMap[event.player]!!.healingReceived += event.amount
+        }
     }
 }

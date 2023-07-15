@@ -4,7 +4,7 @@ import net.minecraftforge.eventbus.api.Event
 
 object WarlordsPlayerEvents {
 
-    abstract class AbstractDamageHealEvent : Event() {
+    abstract class AbstractDamageHealEnergyEvent : Event() {
         abstract val amount: Int
         abstract val player: String
         abstract val isCrit: Boolean
@@ -18,7 +18,7 @@ object WarlordsPlayerEvents {
         override val isCrit: Boolean,
         override val isAbsorbed: Boolean = false,
         override val minute: Int
-    ) : AbstractDamageHealEvent()
+    ) : AbstractDamageHealEnergyEvent()
 
     data class DamageDoneEvent(
         override val amount: Int,
@@ -26,7 +26,7 @@ object WarlordsPlayerEvents {
         override val isCrit: Boolean,
         override val isAbsorbed: Boolean = false,
         override val minute: Int
-    ) : AbstractDamageHealEvent()
+    ) : AbstractDamageHealEnergyEvent()
 
     data class HealingReceivedEvent(
         override val amount: Int,
@@ -34,7 +34,7 @@ object WarlordsPlayerEvents {
         override val isCrit: Boolean,
         override val isAbsorbed: Boolean = false,
         override val minute: Int
-    ) : AbstractDamageHealEvent()
+    ) : AbstractDamageHealEnergyEvent()
 
     data class DamageTakenEvent(
         override val amount: Int,
@@ -42,7 +42,7 @@ object WarlordsPlayerEvents {
         override val isCrit: Boolean,
         override val isAbsorbed: Boolean = false,
         override val minute: Int
-    ) : AbstractDamageHealEvent()
+    ) : AbstractDamageHealEnergyEvent()
 
     data class EnergyReceivedEvent(
         override val amount: Int,
@@ -50,7 +50,7 @@ object WarlordsPlayerEvents {
         override val isCrit: Boolean = false,
         override val isAbsorbed: Boolean = false,
         override val minute: Int
-    ) : AbstractDamageHealEvent()
+    ) : AbstractDamageHealEnergyEvent()
 
     data class EnergyGivenEvent(
         override val amount: Int,
@@ -58,7 +58,7 @@ object WarlordsPlayerEvents {
         override val isCrit: Boolean = false,
         override val isAbsorbed: Boolean = false,
         override val minute: Int
-    ) : AbstractDamageHealEvent()
+    ) : AbstractDamageHealEnergyEvent()
 
     data class EnergyStolenEvent(
         override val amount: Int,
@@ -66,7 +66,7 @@ object WarlordsPlayerEvents {
         override val isCrit: Boolean = false,
         override val isAbsorbed: Boolean = false,
         override val minute: Int
-    ) : AbstractDamageHealEvent()
+    ) : AbstractDamageHealEnergyEvent()
 
     data class EnergyLostEvent(
         override val amount: Int,
@@ -74,7 +74,7 @@ object WarlordsPlayerEvents {
         override val isCrit: Boolean = false,
         override val isAbsorbed: Boolean = false,
         override val minute: Int
-    ) : AbstractDamageHealEvent()
+    ) : AbstractDamageHealEnergyEvent()
 
     data class DamageAbsorbedEvent(
         override val amount: Int,
@@ -82,6 +82,16 @@ object WarlordsPlayerEvents {
         override val isCrit: Boolean,
         override val isAbsorbed: Boolean,
         override val minute: Int
-    ) : AbstractDamageHealEvent()
+    ) : AbstractDamageHealEnergyEvent()
+
+    data class KillEvent(
+        val player: String,
+        val deathPlayer: String,
+        val time: Int,
+        val respawn: Int,
+        val sysTime: Long = System.currentTimeMillis()
+    ) : Event()
+
+    data class KillStealEvent(val otherPlayer: String) : Event()
 
 }

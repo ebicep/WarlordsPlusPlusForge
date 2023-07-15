@@ -1,13 +1,10 @@
-package com.ebicep.warlordsplusplus.parsers
+package com.ebicep.warlordsplusplus.detectors
 
-import com.ebicep.warlordsplusplus.MODID
 import com.ebicep.warlordsplusplus.WarlordsPlusPlus
 import com.ebicep.warlordsplusplus.events.WarlordsPlayerEvents
 import com.ebicep.warlordsplusplus.game.GameStateManager
 import net.minecraft.client.Minecraft
 import net.minecraftforge.client.event.ClientChatReceivedEvent
-import net.minecraftforge.eventbus.api.SubscribeEvent
-import net.minecraftforge.fml.common.Mod
 import thedarkcolour.kotlinforforge.forge.FORGE_BUS
 import java.util.regex.Pattern
 
@@ -16,11 +13,9 @@ const val YOU_DID = """»"""
 
 private val numberPattern = Pattern.compile("\\s[0-9]+\\s")
 
-@Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-object DamageAndHealParser {
+object DamageAndHealParser : ChatParser() {
 
-    @SubscribeEvent
-    fun onChatMessage(e: ClientChatReceivedEvent) {
+    override fun onChatReceived(e: ClientChatReceivedEvent) {
         WarlordsPlusPlus.LOGGER.info("boundType: ${e.boundChatType}")
         if (GameStateManager.notInGame) {
             return
