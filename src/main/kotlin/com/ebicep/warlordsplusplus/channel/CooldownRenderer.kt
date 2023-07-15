@@ -14,11 +14,11 @@ object CooldownRenderer : RenderApiPlayer() {
         return GameStateManager.inWarlords2 &&
                 GameStateManager.inGame &&
                 (event.entity != Minecraft.getInstance().player) &&
-                (GameStateManager.inPvE || !OtherWarlordsPlayers.playersMap.containsKey(Minecraft.getInstance().player?.uuid))
+                (GameStateManager.inPvE || !OtherWarlordsPlayers.playersMap.containsKey(Minecraft.getInstance().player?.scoreboardName))
     }
 
     override fun render(event: RenderPlayerEvent.Post) {
-        val player = OtherWarlordsPlayers.playersMap[entity!!.uuid] ?: return
+        val player = OtherWarlordsPlayers.playersMap[entity!!.scoreboardName] ?: return
         poseStack {
             translateX(-36.5)
             translateY(75.0)

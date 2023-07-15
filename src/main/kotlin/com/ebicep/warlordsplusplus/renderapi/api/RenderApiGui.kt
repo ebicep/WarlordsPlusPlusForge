@@ -22,10 +22,6 @@ abstract class RenderApiGui : RenderApi<RenderGuiOverlayEvent.Pre>() {
         poseStack = e.guiGraphics.pose()
     }
 
-    override fun render(event: RenderGuiOverlayEvent.Pre) {
-    }
-
-
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
     companion object {
 

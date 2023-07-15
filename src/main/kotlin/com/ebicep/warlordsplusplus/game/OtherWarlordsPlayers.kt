@@ -47,7 +47,7 @@ open class OtherWarlordsPlayer(val name: String, val uuid: UUID) {
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 object OtherWarlordsPlayers {
 
-    val playersMap: MutableMap<UUID, OtherWarlordsPlayer> = mutableMapOf()
+    val playersMap: MutableMap<String, OtherWarlordsPlayer> = mutableMapOf()
     //val tempPlayersMap: MutableMap<String, WarlordsPlayer> = mutableMapOf()
 
     fun getOtherWarlordsPlayers(): Collection<OtherWarlordsPlayer> {
@@ -56,7 +56,7 @@ object OtherWarlordsPlayers {
 
     fun getOtherWarlordsPlayers(playersInfo: MutableCollection<PlayerInfo>): Collection<OtherWarlordsPlayer> {
         playersInfo.filter {
-            !playersMap.contains(it.profile.id)
+            !playersMap.contains(it.profile.name)
         }.filter { playerInfo ->
             val playerTeam: PlayerTeam? = playerInfo.team
             if (playerTeam == null) {
@@ -78,7 +78,7 @@ object OtherWarlordsPlayers {
 
             return@map otherWarlordsPlayer
         }.forEach {
-            playersMap[it.uuid] = it
+            playersMap[it.name] = it
         }
 
         //TODO reupdate player
