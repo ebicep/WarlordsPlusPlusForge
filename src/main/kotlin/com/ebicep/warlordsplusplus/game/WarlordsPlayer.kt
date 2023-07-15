@@ -6,6 +6,7 @@ import com.ebicep.warlordsplusplus.util.SpecType
 import com.ebicep.warlordsplusplus.util.Specialization
 import com.ebicep.warlordsplusplus.util.Team
 import com.ebicep.warlordsplusplus.util.WarlordClass
+import net.minecraft.client.Minecraft
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
 
@@ -41,6 +42,20 @@ object WarlordsPlayer {
     var warlord: WarlordClass = WarlordClass.NONE
     var team: Team = Team.NONE
 
+    @SubscribeEvent
+    fun onKill(event: WarlordsPlayerEvents.KillEvent) {
+        val playerName = Minecraft.getInstance().player!!.scoreboardName
+        if (event.player == playerName) {
+            minuteStat[0][0]++
+        } else if (event.deathPlayer == playerName) {
+            minuteStat[0][1]++
+        }
+    }
+
+    @SubscribeEvent
+    fun onHitEvent(event: WarlordsPlayerEvents.HitEvent) {
+        minuteStat[0][2]++
+    }
 
     @SubscribeEvent
     fun onAbstractDamageHealEnergyEvent(event: WarlordsPlayerEvents.AbstractDamageHealEnergyEvent) {

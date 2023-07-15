@@ -98,19 +98,30 @@ object OtherWarlordsPlayers {
     }
 
     @SubscribeEvent
+    fun onKill(event: WarlordsPlayerEvents.KillEvent) {
+        if (event.deathPlayer in playersMap) {
+            val otherWarlordsPlayer = playersMap[event.deathPlayer]!!
+            otherWarlordsPlayer.deaths++
+            otherWarlordsPlayer.isDead = true
+            otherWarlordsPlayer.respawn = event.respawn
+        }
+        if (event.player in playersMap) {
+            playersMap[event.player]!!.kills++
+        }
+    }
+
+    @SubscribeEvent
     fun onAbstractDamageHealEnergyEvent(event: WarlordsPlayerEvents.AbstractDamageHealEnergyEvent) {
+        val player = event.player
+        val otherWarlordsPlayer = if (player in playersMap) playersMap[player]!! else return
         when (event::class) {
-            WarlordsPlayerEvents.DamageDoneEvent::class ->
-                if (event.player in playersMap) playersMap[event.player]!!.damageDone += event.amount
+            WarlordsPlayerEvents.DamageDoneEvent::class -> otherWarlordsPlayer.damageDone += event.amount
 
-            WarlordsPlayerEvents.DamageTakenEvent::class ->
-                if (event.player in playersMap) playersMap[event.player]!!.damageReceived += event.amount
+            WarlordsPlayerEvents.DamageTakenEvent::class -> otherWarlordsPlayer.damageReceived += event.amount
 
-            WarlordsPlayerEvents.HealingGivenEvent::class ->
-                if (event.player in playersMap) playersMap[event.player]!!.healingDone += event.amount
+            WarlordsPlayerEvents.HealingGivenEvent::class -> otherWarlordsPlayer.healingDone += event.amount
 
-            WarlordsPlayerEvents.HealingReceivedEvent::class ->
-                if (event.player in playersMap) playersMap[event.player]!!.healingReceived += event.amount
+            WarlordsPlayerEvents.HealingReceivedEvent::class -> otherWarlordsPlayer.healingReceived += event.amount
         }
     }
 }

@@ -94,4 +94,5 @@ object WarlordsPlayerEvents {
 
     data class KillStealEvent(val otherPlayer: String) : Event()
 
+    data class HitEvent(val otherPlayer: String, val time: Int) : Event()
 }

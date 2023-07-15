@@ -19,6 +19,7 @@ abstract class ChatParser {
         init {
             parsers.add(DamageAndHealParser)
             parsers.add(KillAssistParser)
+            parsers.add(HitDetector)
         }
 
         @SubscribeEvent
