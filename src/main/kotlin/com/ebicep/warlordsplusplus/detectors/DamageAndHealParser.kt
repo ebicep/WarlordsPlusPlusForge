@@ -16,7 +16,6 @@ private val numberPattern = Pattern.compile("\\s[0-9]+\\s")
 object DamageAndHealParser : ChatParser() {
 
     override fun onChatReceived(e: ClientChatReceivedEvent) {
-        WarlordsPlusPlus.LOGGER.info("boundType: ${e.boundChatType}")
         if (GameStateManager.notInGame) {
             return
         }
