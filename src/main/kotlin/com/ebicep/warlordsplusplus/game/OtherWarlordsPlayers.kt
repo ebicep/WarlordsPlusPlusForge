@@ -9,13 +9,22 @@ import com.ebicep.warlordsplusplus.util.WarlordClass
 import net.minecraft.ChatFormatting
 import net.minecraft.client.Minecraft
 import net.minecraft.client.multiplayer.PlayerInfo
+import net.minecraft.client.player.RemotePlayer
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.ListTag
+import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
 import net.minecraft.world.scores.PlayerTeam
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
 import java.util.*
+import java.util.regex.Pattern
 
+
+private val numberPattern = Pattern.compile("[0-9]{2}")
 
 open class OtherWarlordsPlayer(val name: String, val uuid: UUID) {
 
@@ -98,6 +107,16 @@ object OtherWarlordsPlayers {
             otherWarlordsPlayer.warlordClass = WarlordClass.values().first {
                 playerTeam.playerPrefix.string.contains(it.shortName)
             }
+            playerInfo.tabListDisplayName?.string?.let {
+                val m = numberPattern.matcher(it)
+                otherWarlordsPlayer.level =
+                    if (!m.find()) {
+                        0
+                    } else {
+                        m.group().toInt()
+                    }
+            }
+
             otherWarlordsPlayer.team = Team.values().first {
                 playerTeam.color == it.color
             }
@@ -105,6 +124,61 @@ object OtherWarlordsPlayers {
             return@map otherWarlordsPlayer
         }.forEach {
             playersMap[it.name] = it
+        }
+
+        val players = Minecraft.getInstance().level!!.players()
+        playersMap.filter {
+            it.value.spec == Specialization.NONE || GameStateManager.inWarlords2
+        }.forEach { player ->
+            players.filter {
+                it is RemotePlayer && it.gameProfile.name == player.key
+            }.map { p ->
+                val selectedItem = p.inventory.getSelected()
+                if (selectedItem == ItemStack.EMPTY || selectedItem.count != 1) {
+                    return@map
+                }
+                val tag: CompoundTag = selectedItem.tag ?: return@map
+                val display: CompoundTag = tag.getCompound("display") ?: return@map
+                val displayString = display.toString()
+                when {
+                    displayString.contains("RIGHT-CLICK") -> {
+                        val lore: ListTag = display.getList("Lore", Tag.TAG_STRING.toInt()) ?: return@map
+                        val skillBoostStart = lore.getString(4)
+                        if (skillBoostStart.contains("green")) {
+                            player.value.spec = Specialization.values().firstOrNull {
+                                skillBoostStart.contains(it.classname)
+                            } ?: Specialization.NONE
+                        } else {
+                            val afterRightClick = displayString.substring(displayString.indexOf("RIGHT-CLICK"))
+                            player.value.spec = Specialization.values().firstOrNull {
+                                afterRightClick.contains(it.weapon)
+                            } ?: Specialization.NONE
+                        }
+                    }
+
+                    displayString.contains("LEFT-CLICK") -> {
+                        val name = display.getString("Name") ?: return@map
+                        player.value.spec = Specialization.values().firstOrNull {
+                            name.contains(it.weapon)
+                        } ?: Specialization.NONE
+                    }
+
+                    displayString.contains("Cooldown") && !display.contains("Mount") -> {
+                        val name = display.getString("Name") ?: return@map
+                        val ability: ((Specialization) -> String) = when (selectedItem.item) {
+                            Items.RED_DYE -> { it: Specialization -> it.red }
+                            Items.GLOWSTONE_DUST -> { it: Specialization -> it.purple }
+                            Items.LIME_DYE -> { it: Specialization -> it.blue }
+                            Items.ORANGE_DYE -> { it: Specialization -> it.orange }
+                            else -> return@map
+                        }
+                        player.value.spec = Specialization.values().firstOrNull {
+                            name.contains(ability(it))
+                        } ?: Specialization.NONE
+                    }
+                }
+
+            }
         }
 
         //TODO reupdate player

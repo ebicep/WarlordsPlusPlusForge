@@ -69,9 +69,9 @@ object WarlordsPlusPlusScoreBoard : RenderApiGuiOverride(VanillaGuiOverlay.PLAYE
 
         xStart += moveScoreboard
         if (splitScoreBoard) {
-            xStart -= 60
+            xStart -= 70
             if (showDoneAndReceived) {
-                xStart -= 65
+                xStart -= 75
             }
         }
 
@@ -291,10 +291,10 @@ object WarlordsPlusPlusScoreBoard : RenderApiGuiOverride(VanillaGuiOverlay.PLAYE
     var showNewScoreboard = true
     var hideNewScoreboardPvE = true
     var setScaleDOM = ".8"
-    var setScaleCTFTDM = "1.0"
+    var setScaleCTFTDM = ".8"
     var moveScoreboard = 0
-    var showTopHeader = true
-    var showOutline = false
+    var showTopHeader = false
+    var showOutline = true
     var showDiedToYouStoleKill = false
     var showDoneAndReceived = true
     var splitScoreBoard = true

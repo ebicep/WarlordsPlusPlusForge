@@ -42,7 +42,7 @@ println(
 minecraft {
     mappings("parchment", "2023.06.26-1.20.1")
 
-    //accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
+    accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
 
     runs.all {
         mods {
