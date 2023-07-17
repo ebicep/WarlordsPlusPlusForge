@@ -1,5 +1,6 @@
 package com.ebicep.warlordsplusplus.game
 
+import com.ebicep.warlordsplusplus.detectors.RespawnTimerDetector
 import com.ebicep.warlordsplusplus.util.ScoreboardUtils
 import net.minecraft.world.scores.PlayerTeam
 
@@ -12,6 +13,10 @@ enum class GameModes {
         override fun getTime(sidebar: List<PlayerTeam>): Pair<Int, Int>? {
             return getTimePvP(sidebar, 10)
         }
+
+        override fun getCurrentRespawn(): Int {
+            return RespawnTimerDetector.respawnTimer + (if (RespawnTimerDetector.respawnTimer <= 4) 12 else 0)
+        }
     },
     TDM {
         override fun isCurrent(sidebar: List<PlayerTeam>): Boolean {
@@ -21,6 +26,10 @@ enum class GameModes {
         override fun getTime(sidebar: List<PlayerTeam>): Pair<Int, Int>? {
             return getTimePvP(sidebar, 7)
         }
+
+        override fun getCurrentRespawn(): Int {
+            return 6
+        }
     },
     DOM {
         override fun isCurrent(sidebar: List<PlayerTeam>): Boolean {
@@ -29,6 +38,10 @@ enum class GameModes {
 
         override fun getTime(sidebar: List<PlayerTeam>): Pair<Int, Int>? {
             return getTimePvP(sidebar, 10)
+        }
+
+        override fun getCurrentRespawn(): Int {
+            return RespawnTimerDetector.respawnTimer + (if (RespawnTimerDetector.respawnTimer < 8) 8 else 0)
         }
     },
 
@@ -41,6 +54,7 @@ enum class GameModes {
         override fun getTime(sidebar: List<PlayerTeam>): Pair<Int, Int>? {
             return getTimePvE(sidebar, 4, 6)
         }
+
     },
     ONSLAUGHT {
         override fun isCurrent(sidebar: List<PlayerTeam>): Boolean {
@@ -66,6 +80,10 @@ enum class GameModes {
     abstract fun isCurrent(sidebar: List<PlayerTeam>): Boolean
 
     abstract fun getTime(sidebar: List<PlayerTeam>): Pair<Int, Int>?
+
+    open fun getCurrentRespawn(): Int {
+        return -1
+    }
 
     fun isPvP(): Boolean {
         return when (this) {

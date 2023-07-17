@@ -1,5 +1,6 @@
 package com.ebicep.warlordsplusplus.events
 
+import com.ebicep.warlordsplusplus.game.GameStateManager
 import net.minecraftforge.eventbus.api.Event
 
 object WarlordsPlayerEvents {
@@ -88,7 +89,7 @@ object WarlordsPlayerEvents {
         val player: String,
         val deathPlayer: String,
         val time: Int,
-        val respawn: Int,
+        val respawn: Int = GameStateManager.currentGameMode.getCurrentRespawn(),
         val sysTime: Long = System.currentTimeMillis()
     ) : Event()
 

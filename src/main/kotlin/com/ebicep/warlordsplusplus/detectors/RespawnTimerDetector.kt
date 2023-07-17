@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.Mod
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 object RespawnTimerDetector {
 
-    private var respawnTimer = 0
+    var respawnTimer = 0
 
     @SubscribeEvent
     fun onReset(event: WarlordsGameEvents.ResetEvent) {

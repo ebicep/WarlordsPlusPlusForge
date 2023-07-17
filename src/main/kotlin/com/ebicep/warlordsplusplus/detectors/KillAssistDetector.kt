@@ -18,19 +18,19 @@ object KillAssistParser : ChatParser {
                 textMessage.contains("was killed by") -> {
                     val player = textMessage.substring(textMessage.indexOf("by") + 3)
                     val deathPlayer = textMessage.substring(0, textMessage.indexOf("was") - 1)
-                    FORGE_BUS.post(WarlordsPlayerEvents.KillEvent(player, deathPlayer, GameStateManager.minute, 0))
+                    FORGE_BUS.post(WarlordsPlayerEvents.KillEvent(player, deathPlayer, GameStateManager.minute))
                 }
 
                 textMessage.contains("You were killed") -> {
                     val player = textMessage.substring(textMessage.indexOf("by ") + 3)
                     val deathPlayer = Minecraft.getInstance().player!!.scoreboardName
-                    FORGE_BUS.post(WarlordsPlayerEvents.KillEvent(player, deathPlayer, GameStateManager.minute, 0))
+                    FORGE_BUS.post(WarlordsPlayerEvents.KillEvent(player, deathPlayer, GameStateManager.minute))
                 }
 
                 textMessage.contains("You killed") -> {
                     val deathPlayer = textMessage.substring(textMessage.indexOf("killed ") + 7)
                     val player = Minecraft.getInstance().player!!.scoreboardName
-                    FORGE_BUS.post(WarlordsPlayerEvents.KillEvent(player, deathPlayer, GameStateManager.minute, 0))
+                    FORGE_BUS.post(WarlordsPlayerEvents.KillEvent(player, deathPlayer, GameStateManager.minute))
                 }
 
                 textMessage.contains("You assisted") -> {
