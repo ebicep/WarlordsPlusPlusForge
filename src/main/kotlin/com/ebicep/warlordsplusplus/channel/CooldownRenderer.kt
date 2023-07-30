@@ -18,19 +18,23 @@ object CooldownRenderer : RenderApiPlayer() {
     }
 
     override fun render(event: RenderPlayerEvent.Post) {
-        val player = OtherWarlordsPlayers.playersMap[entity!!.scoreboardName] ?: return
+        val otherWarlordsPlayer = OtherWarlordsPlayers.playersMap[entity!!.scoreboardName]
+        if (otherWarlordsPlayer == null) {
+            OtherWarlordsPlayers.getOtherWarlordsPlayers()
+            return
+        }
         poseStack {
             translateX(-36.5)
             translateY(75.0)
             scale(.4)
 
-            drawAbility(player.redCooldown, ImageRegistry.RED_ABILITY)
+            drawAbility(otherWarlordsPlayer.redCooldown, ImageRegistry.RED_ABILITY)
             translateX(60)
-            drawAbility(player.purpleCooldown, ImageRegistry.PURPLE_ABILITY)
+            drawAbility(otherWarlordsPlayer.purpleCooldown, ImageRegistry.PURPLE_ABILITY)
             translateX(60)
-            drawAbility(player.blueCooldown, ImageRegistry.BLUE_ABILITY)
+            drawAbility(otherWarlordsPlayer.blueCooldown, ImageRegistry.BLUE_ABILITY)
             translateX(60)
-            drawAbility(player.orangeCooldown, ImageRegistry.ORANGE_ABILITY)
+            drawAbility(otherWarlordsPlayer.orangeCooldown, ImageRegistry.ORANGE_ABILITY)
         }
         poseStack {
             translateY(37)
@@ -43,13 +47,13 @@ object CooldownRenderer : RenderApiPlayer() {
             renderRectXCentered(width, 5f, Colors.GRAY)
             translateX(-width / 2 - .5)
             translateZ(.01)
-            renderRect(((player.currentEnergy.toDouble() / player.maxEnergy) * width).toFloat(), 5f, Colors.GOLD)
+            renderRect(((otherWarlordsPlayer.currentEnergy.toDouble() / otherWarlordsPlayer.maxEnergy) * width).toFloat(), 5f, Colors.GOLD)
         }
         poseStack {
             translateY(39.5)
             translateZ(.05)
             scale(1.5)
-            player.currentEnergy.toString().drawCentered(color = Colors.GREEN)
+            otherWarlordsPlayer.currentEnergy.toString().drawCentered(color = Colors.GREEN)
         }
     }
 

@@ -61,7 +61,7 @@ object GameStateManager {
         val sidebarObjective = scoreboard.getDisplayObjective(1) ?: return
         val unformattedDisplayName = sidebarObjective.displayName.string
         inWarlords = unformattedDisplayName.contains("WARLORDS", ignoreCase = true)
-        //inWarlords2 = unformattedDisplayName.contains("WARLORDS 2.0", ignoreCase = true)
+        inWarlords2 = unformattedDisplayName.contains("WARLORDS 2.0", ignoreCase = true)
         if (!inWarlords) {
             currentGameMode = GameModes.NONE
             return
