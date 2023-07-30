@@ -152,79 +152,56 @@ object WarlordsPlusPlusScoreBoard : RenderApiGuiOverride(VanillaGuiOverlay.PLAYE
             xDone = 30.0
         }
 
+        fun renderHeader() {
+            translateY(-3)
+            translateX(xLevel + xName)
+            "Name".draw()
+            if (!showDoneAndReceived && !showDiedToYouStoleKill) {
+                translateX(xKills)
+                "K".draw()
+                translateX(xDeaths)
+                "D".draw()
+            } else {
+                translateX(xKills)
+                "Kills".draw()
+                translateX(xDeaths)
+                "Deaths".draw()
+            }
+            if (showDoneAndReceived) {
+                translateX(xDone)
+                "Given".draw()
+                if (showTopHeader) {
+                    if (showDiedToYouStoleKill) {
+                        translateX(xReceived)
+                    } else {
+                        translateX(xReceived - 12.5)
+                    }
+                    "Received".draw()
+                }
+            }
+            if (showDiedToYouStoleKill) {
+                translateX(xKilled)
+                "DiedToYou/StoleKill".draw()
+            }
+        }
+
         if (showTopHeader) {
             translate(xStart, yStart)
             renderRect(width, 13, Colors.DEF)
             poseStack {
-                translateY(-3)
-                translateX(xLevel + xName)
-                "Name".draw()
-                if (!showDoneAndReceived && !showDiedToYouStoleKill) {
-                    translateX(xKills)
-                    "K".draw()
-                    translateX(xDeaths)
-                    "D".draw()
-                } else {
-                    translateX(xKills)
-                    "Kills".draw()
-                    translateX(xDeaths)
-                    "Deaths".draw()
-                }
-                if (showDoneAndReceived) {
-                    translateX(xDone)
-                    "Given".draw()
-                    if (showTopHeader) {
-                        if (showDiedToYouStoleKill)
-                            translateX(xReceived)
-                        else
-                            translateX(xReceived - 12.5)
-                        "Received".draw()
-                    }
-                }
-                if (showDiedToYouStoleKill) {
-                    translateX(xKilled)
-                    "DiedToYou/StoleKill".draw()
-                }
+                renderHeader()
             }
             if (splitScoreBoard) {
                 poseStack {
                     translateX(width + 5)
                     renderRect(width, 13, Colors.DEF)
-                    translateY(-3)
-                    translateX(xLevel + xName)
-                    "Name".draw()
-                    if (!showDoneAndReceived && !showDiedToYouStoleKill) {
-                        translateX(xKills)
-                        "K".draw()
-                        translateX(xDeaths)
-                        "D".draw()
-                    } else {
-                        translateX(xKills)
-                        "Kills".draw()
-                        translateX(xDeaths)
-                        "Deaths".draw()
-                    }
-                    if (showDoneAndReceived) {
-                        translateX(xDone)
-                        "Given".draw()
-                        if (showTopHeader) {
-                            if (showDiedToYouStoleKill) {
-                                translateX(xReceived)
-                            } else {
-                                translateX(xReceived - 12.5)
-                            }
-                            "Received".draw()
-                        }
-                    }
-                    if (showDiedToYouStoleKill) {
-                        translateX(xKilled)
-                        "DiedToYou/StoleKill".draw()
-                    }
+                    renderHeader()
                 }
             }
         } else {
             translate(xStart, yStart - 15)
         }
+
 
         fun renderLine(index: Int, p: OtherWarlordsPlayer) {
             val isThePlayer = p.uuid == thePlayer.uuid
