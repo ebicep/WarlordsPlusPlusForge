@@ -40,7 +40,7 @@ println(
 )
 
 minecraft {
-    mappings("parchment", "2023.06.26-1.20.1")
+    mappings("parchment", "2023.07.16-1.20.1")
 
     accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
 
@@ -64,7 +64,7 @@ minecraft {
             property("log4j.configurationFile", "log4j2.xml")
 
             // for hotswap https://forge.gemwire.uk/wiki/Hotswap
-            //jvmArg("-XX:+AllowEnhancedClassRedefinition")
+            jvmArg("-XX:+AllowEnhancedClassRedefinition")
         }
     }
 }
@@ -89,7 +89,7 @@ repositories {
 }
 
 dependencies {
-    minecraft("net.minecraftforge:forge:1.20-46.0.1")
+    minecraft("net.minecraftforge:forge:1.20.1-47.1.0")
 //    annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
     implementation("thedarkcolour:kotlinforforge:4.3.0")
 }

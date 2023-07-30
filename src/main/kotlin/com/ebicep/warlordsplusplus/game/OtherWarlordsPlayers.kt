@@ -15,6 +15,7 @@ import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
+import net.minecraft.network.chat.TextColor
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.scores.PlayerTeam
@@ -107,14 +108,18 @@ object OtherWarlordsPlayers {
             otherWarlordsPlayer.warlordClass = WarlordClass.values().first {
                 playerTeam.playerPrefix.string.contains(it.shortName)
             }
-            playerInfo.tabListDisplayName?.string?.let {
-                val m = numberPattern.matcher(it)
+            playerInfo.team?.playerSuffix?.let { suffix ->
+                val m = numberPattern.matcher(suffix.string)
                 otherWarlordsPlayer.level =
                     if (!m.find()) {
                         0
                     } else {
                         m.group().toInt()
                     }
+
+                otherWarlordsPlayer.prestiged = suffix.siblings.any {
+                    it.style.color == TextColor.fromLegacyFormat(ChatFormatting.GOLD)
+                }
             }
 
             otherWarlordsPlayer.team = Team.values().first {
