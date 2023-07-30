@@ -16,6 +16,7 @@ import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.MultiBufferSource
+import net.minecraft.network.chat.Component
 import net.minecraft.world.phys.Vec3
 import net.minecraftforge.eventbus.api.Event
 import org.apache.logging.log4j.Level
@@ -179,6 +180,30 @@ abstract class RenderApi<E : Event> : RenderHelper(), RenderBasics<E> {
         font.width(this)
 
     fun String.draw(seeThruBlocks: Boolean = false, shadow: Boolean = false, pX: Float = 0f, color: Colors = Colors.WHITE) {
+        if (seeThruBlocks) {
+            RenderSystem.disableDepthTest()
+            RenderSystem.depthMask(true)
+        }
+        val bufferSource = getMultiBufferSource(event!!)
+        font.drawInBatch(
+            this,
+            pX,
+            0f,
+            color.FULL,
+            shadow,
+            poseStack!!.last().pose(),
+            bufferSource,
+            Font.DisplayMode.NORMAL,
+            0,
+            LightTexture.FULL_BRIGHT
+        )
+        if (seeThruBlocks) {
+            RenderSystem.enableDepthTest()
+            RenderSystem.depthMask(false)
+        }
+    }
+
+    fun Component.draw(seeThruBlocks: Boolean = false, shadow: Boolean = false, pX: Float = 0f, color: Colors = Colors.WHITE) {
         if (seeThruBlocks) {
             RenderSystem.disableDepthTest()
             RenderSystem.depthMask(true)

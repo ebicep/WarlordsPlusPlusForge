@@ -1,7 +1,6 @@
 package com.ebicep.warlordsplusplus.modules
 
 import com.ebicep.warlordsplusplus.config.ConfigScoreboardGui
-import com.ebicep.warlordsplusplus.game.GameModes
 import com.ebicep.warlordsplusplus.game.GameStateManager
 import com.ebicep.warlordsplusplus.game.OtherWarlordsPlayer
 import com.ebicep.warlordsplusplus.game.WarlordsPlayer
@@ -12,6 +11,7 @@ import com.ebicep.warlordsplusplus.util.Team
 import com.ebicep.warlordsplusplus.util.WarlordClass
 import net.minecraft.ChatFormatting
 import net.minecraft.client.multiplayer.ClientPacketListener
+import net.minecraft.network.chat.Component
 import net.minecraft.world.scores.Objective
 import net.minecraftforge.client.event.RenderGuiOverlayEvent
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay
@@ -21,10 +21,6 @@ object WarlordsPlusPlusScoreBoard : RenderApiGuiOverride(VanillaGuiOverlay.PLAYE
 
     private val showNewScoreboard: Boolean
         get() = ConfigScoreboardGui.enabled.get()
-    private val setScaleCTFTDM: Double
-        get() = ConfigScoreboardGui.scaleCTFTDM.get()
-    private val setScaleDOM: Double
-        get() = ConfigScoreboardGui.scaleDOM.get()
     private val showTopHeader: Boolean
         get() = ConfigScoreboardGui.showTopHeader.get()
     private val showOutline: Boolean
@@ -40,7 +36,7 @@ object WarlordsPlusPlusScoreBoard : RenderApiGuiOverride(VanillaGuiOverlay.PLAYE
         val scoreObjective: Objective? = mc.level!!.scoreboard.getDisplayObjective(0)
         val handler: ClientPacketListener = mc.player!!.connection
 
-        return super.shouldRender(event) && GameStateManager.inGame && showNewScoreboard &&
+        return super.shouldRender(event) && GameStateManager.inGame && GameStateManager.currentGameMode.isPvP() && showNewScoreboard &&
                 (mc.options.keyPlayerList.isDown && (!mc.isLocalServer || handler.onlinePlayers.size > 1 || scoreObjective != null))
     }
 
@@ -103,18 +99,13 @@ object WarlordsPlusPlusScoreBoard : RenderApiGuiOverride(VanillaGuiOverlay.PLAYE
             },
         )
 
-//        if (hideNewScoreboardPvE && GameStateManager.isPvE) {
-//            return
-//        }
-
         val teamBlue = players.filter { it.team == Team.BLUE }.sortedByDescending { it.level }
         val teamRed = players.filter { it.team == Team.RED }.sortedByDescending { it.level }
 
-
-        val mostDeathsRed = if (teamRed.isEmpty()) 0 else teamRed.map { it.deaths }.sorted().reversed()[0]
-        val mostDeathsBlue = if (teamBlue.isEmpty()) 0 else teamBlue.map { it.deaths }.sorted().reversed()[0]
-        val mostKillsRed = if (teamRed.isEmpty()) 0 else teamRed.map { it.kills }.sorted().reversed()[0]
         val mostKillsBlue = if (teamBlue.isEmpty()) 0 else teamBlue.map { it.kills }.sorted().reversed()[0]
+        val mostKillsRed = if (teamRed.isEmpty()) 0 else teamRed.map { it.kills }.sorted().reversed()[0]
+        val mostDeathsBlue = if (teamBlue.isEmpty()) 0 else teamBlue.map { it.deaths }.sorted().reversed()[0]
+        val mostDeathsRed = if (teamRed.isEmpty()) 0 else teamRed.map { it.deaths }.sorted().reversed()[0]
 
         var width = 443
 
@@ -134,14 +125,10 @@ object WarlordsPlusPlusScoreBoard : RenderApiGuiOverride(VanillaGuiOverlay.PLAYE
         var xStart = xCenter - (width / 2)
         val yStart = 25
 
-        if (GameStateManager.currentGameMode == GameModes.CTF || GameStateManager.currentGameMode == GameModes.TDM) {
-            poseStack!!.scale(setScaleCTFTDM.toFloat(), setScaleCTFTDM.toFloat(), 1f)
-            xStart =
-                (xCenter + 50 - (setScaleCTFTDM * 100).toInt() / 2 - ((width * (setScaleCTFTDM * 100).toInt() / 100 / 2)))
-        } else if (GameStateManager.currentGameMode == GameModes.DOM) {
-            poseStack!!.scale(setScaleDOM.toFloat(), setScaleDOM.toFloat(), 1f)
-            xStart =
-                (xCenter + 50 - (setScaleDOM * 100).toInt() / 2 - ((width * (setScaleDOM * 100).toInt() / 100 / 2)))
+        GameStateManager.currentGameMode.getScale()?.let {
+            poseStack!!.scale(it.toFloat(), it.toFloat(), 1f)
+            val scaleStart = (it * 100).toInt()
+            xStart = (xCenter + 50 - scaleStart / 2 - ((width * scaleStart / 100 / 2)))
         }
 
         //xStart += moveScoreboard
@@ -221,10 +208,11 @@ object WarlordsPlusPlusScoreBoard : RenderApiGuiOverride(VanillaGuiOverlay.PLAYE
                         translateX(xDone)
                         "Given".draw()
                         if (showTopHeader) {
-                            if (showDiedToYouStoleKill)
+                            if (showDiedToYouStoleKill) {
                                 translateX(xReceived)
-                            else
+                            } else {
                                 translateX(xReceived - 12.5)
+                            }
                             "Received".draw()
                         }
                     }
@@ -239,6 +227,11 @@ object WarlordsPlusPlusScoreBoard : RenderApiGuiOverride(VanillaGuiOverlay.PLAYE
         }
 
         fun renderLine(index: Int, p: OtherWarlordsPlayer) {
+            val isThePlayer = p.uuid == thePlayer.uuid
+            val dead = p.isDead
+            val hasMostDeaths = if (p.team == Team.BLUE) p.deaths == mostDeathsBlue else p.deaths == mostDeathsRed
+            val hasMostKills = if (p.team == Team.BLUE) p.kills == mostKillsBlue else p.kills == mostKillsRed
+
             if (showOutline) {
                 translateY(-2) {
                     renderRect(width.toDouble(), 1.25, Colors.DEF)
@@ -258,79 +251,69 @@ object WarlordsPlusPlusScoreBoard : RenderApiGuiOverride(VanillaGuiOverlay.PLAYE
                 }
             }
 
-            fun hasMostKills(): Boolean {
-                return if (p.team == Team.BLUE)
-                    p.kills == mostKillsBlue
-                else
-                    p.kills == mostKillsRed
-            }
-
-            fun hasMostDeaths(): Boolean {
-                return if (p.team == Team.BLUE)
-                    p.deaths == mostDeathsBlue
-                else
-                    p.deaths == mostDeathsRed
-            }
-
-            fun drawFlag(): String {
-//                if (p.hasFlag) {
-//                    return if (p.team == Team.BLUE)
-//                        "${ChatFormatting.RED}\u2690 "
-//                    else
-//                        "${ChatFormatting.BLUE}\u2690 "
-//                }
-                return ""
-            }
-
-            fun isPrestige(): String {
-                return if (p.prestiged)
-                    ChatFormatting.GOLD.toString()
-                else ""
-            }
-
-            fun level(level: Int): String {
-                return if (level < 10)
-                    "0${level}"
-                else level.toString()
-            }
-
             poseStack {
                 translate(xLevel, .5)
-                val isThePlayer = p.uuid == thePlayer.uuid
-                "${ChatFormatting.GOLD}${p.warlordClass.shortName}${ChatFormatting.RESET} ${isPrestige()}${level(p.level)} ${if (isThePlayer) WarlordsPlayer.spec.icon else p.spec.icon}".draw()
+                Component.empty()
+                    .append(Component.literal(p.warlordClass.shortName)
+                        .withStyle { it.withColor(p.levelColor) }
+                    )
+                    .append(" ${p.level.toString().padStart(2, '0')} ")
+                    .append(if (isThePlayer) WarlordsPlayer.spec.iconComponent else p.spec.iconComponent)
+                    .draw()
                 translateX(xName)
-                "${drawFlag()}${
-                    if (p.isDead) "${ChatFormatting.GRAY}${if (!GameStateManager.inWarlords2) "${p.respawn} " else ""}" else p.team.color.toString()
-                }${
-                    if (p.left) "${ChatFormatting.GRAY}${ChatFormatting.STRIKETHROUGH}" else ""
-                }${
-                    if (isThePlayer) ChatFormatting.GREEN else ""
-                }${p.name}".draw()
+                Component.empty()
+                    .append(Component.literal(if (p.hasFlag) "⚐ " else "")
+                        .withStyle { it.withColor(p.team.color) }
+                    )
+                    .append(Component.literal("${if (dead && !GameStateManager.inWarlords2) "${p.respawn} " else ""}${p.name}")
+                        .withStyle {
+                            it.withColor(
+                                if (isThePlayer) ChatFormatting.GREEN
+                                else if (dead) ChatFormatting.GRAY
+                                else p.team.color
+                            ).withStrikethrough(p.left)
+                        }
+                    )
+                    .draw()
                 translateX(xKills)
-                "${if (hasMostKills()) ChatFormatting.GOLD else ChatFormatting.RESET}${p.kills}".draw()
+                Component.literal(p.kills.toString())
+                    .withStyle {
+                        it.withColor(
+                            if (hasMostKills) ChatFormatting.GOLD
+                            else null
+                        )
+                    }
+                    .draw()
                 translateX(xDeaths)
-                "${if (hasMostDeaths()) ChatFormatting.DARK_RED else ChatFormatting.RESET}${p.deaths}".draw()
+                Component.literal(p.deaths.toString())
+                    .withStyle {
+                        it.withColor(
+                            if (hasMostDeaths) ChatFormatting.DARK_RED
+                            else null
+                        )
+                    }
+                    .draw()
                 if (WarlordsPlayer.team == p.team) {
                     if (showDoneAndReceived) {
                         translateX(xDone)
-                        "${ChatFormatting.GREEN}${p.healingReceived}".draw()
+                        Component.literal(p.healingReceived.toString()).withStyle { it.withColor(ChatFormatting.GREEN) }.draw()
                         translateX(xReceived)
-                        "${ChatFormatting.DARK_GREEN}${p.healingDone}".draw()
+                        Component.literal(p.healingDone.toString()).withStyle { it.withColor(ChatFormatting.DARK_GREEN) }.draw()
                     }
                     if (showDiedToYouStoleKill) {
                         translateX(xKilled)
-                        "${ChatFormatting.RESET}${p.stoleKill}".draw()
+                        Component.literal(p.stoleKill.toString()).draw()
                     }
                 } else {
                     if (showDoneAndReceived) {
                         translateX(xDone)
-                        "${ChatFormatting.RED}${p.damageReceived}".draw()
+                        Component.literal(p.damageReceived.toString()).withStyle { it.withColor(ChatFormatting.RED) }.draw()
                         translateX(xReceived)
-                        "${ChatFormatting.DARK_RED}${p.damageDone}".draw()
+                        Component.literal(p.damageDone.toString()).withStyle { it.withColor(ChatFormatting.DARK_RED) }.draw()
                     }
                     if (showDiedToYouStoleKill) {
                         translateX(xKilled)
-                        "${ChatFormatting.RESET}${p.died}".draw()
+                        Component.literal(p.died.toString()).draw()
                     }
                 }
             }

@@ -39,6 +39,7 @@ open class OtherWarlordsPlayer(val name: String, val uuid: UUID) {
     var spec = Specialization.NONE
     var team = Team.NONE
     var level = 0
+    var levelColor: TextColor? = TextColor.fromLegacyFormat(ChatFormatting.GOLD)
     var prestiged: Boolean = false
     var left: Boolean = false
 
@@ -50,6 +51,7 @@ open class OtherWarlordsPlayer(val name: String, val uuid: UUID) {
     var caps: Int = 0
     var isDead: Boolean = false
     var respawn: Int = -1
+    var hasFlag: Boolean = false
 
     var currentEnergy: Int = 0
     var maxEnergy: Int = 0
@@ -116,7 +118,13 @@ object OtherWarlordsPlayers {
                     } else {
                         m.group().toInt()
                     }
-
+                //TODO
+//                otherWarlordsPlayer.levelColor =
+//                    if (!m.find()) {
+//                    null
+//                } else {
+//                    m.group().
+//                }
                 otherWarlordsPlayer.prestiged = suffix.siblings.any {
                     it.style.color == TextColor.fromLegacyFormat(ChatFormatting.GOLD)
                 }

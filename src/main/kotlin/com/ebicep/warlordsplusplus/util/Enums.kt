@@ -184,6 +184,6 @@ enum class SpecType(val specName: String, val symbol: String, val color: ChatFor
     val coloredSymbol = "$color$symbol" //TODO
     val coloredSymbolComponent = Component.literal(symbol)
         .withStyle {
-            it.withColor(ChatFormatting.WHITE)
+            it.withColor(color)
         }
 }

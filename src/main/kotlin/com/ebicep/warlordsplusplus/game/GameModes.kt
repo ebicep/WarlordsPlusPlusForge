@@ -1,5 +1,6 @@
 package com.ebicep.warlordsplusplus.game
 
+import com.ebicep.warlordsplusplus.config.ConfigScoreboardGui
 import com.ebicep.warlordsplusplus.detectors.RespawnTimerDetector
 import com.ebicep.warlordsplusplus.util.ScoreboardUtils
 import net.minecraft.world.scores.PlayerTeam
@@ -17,6 +18,10 @@ enum class GameModes {
         override fun getCurrentRespawn(): Int {
             return RespawnTimerDetector.respawnTimer + (if (RespawnTimerDetector.respawnTimer <= 4) 12 else 0)
         }
+
+        override fun getScale(): Double? {
+            return ConfigScoreboardGui.scaleCTFTDM.get()
+        }
     },
     TDM {
         override fun isCurrent(sidebar: List<PlayerTeam>): Boolean {
@@ -30,6 +35,10 @@ enum class GameModes {
         override fun getCurrentRespawn(): Int {
             return 6
         }
+
+        override fun getScale(): Double? {
+            return ConfigScoreboardGui.scaleCTFTDM.get()
+        }
     },
     DOM {
         override fun isCurrent(sidebar: List<PlayerTeam>): Boolean {
@@ -42,6 +51,10 @@ enum class GameModes {
 
         override fun getCurrentRespawn(): Int {
             return RespawnTimerDetector.respawnTimer + (if (RespawnTimerDetector.respawnTimer < 8) 8 else 0)
+        }
+
+        override fun getScale(): Double? {
+            return ConfigScoreboardGui.scaleDOM.get()
         }
     },
 
@@ -83,6 +96,10 @@ enum class GameModes {
 
     open fun getCurrentRespawn(): Int {
         return -1
+    }
+
+    open fun getScale(): Double? {
+        return null
     }
 
     fun isPvP(): Boolean {
