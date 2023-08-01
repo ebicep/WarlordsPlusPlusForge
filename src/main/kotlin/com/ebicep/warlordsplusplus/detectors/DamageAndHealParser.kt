@@ -117,7 +117,8 @@ object DamageAndHealParser : ChatParser {
                             WarlordsPlayerEvents.DamageDoneEvent(
                                 amount,
                                 otherPlayer,
-                                isCrit
+                                isCrit,
+                                ability = ""
                             )
                         )
                         //Player's Avenger's Strike stole energy from otherPlayer
