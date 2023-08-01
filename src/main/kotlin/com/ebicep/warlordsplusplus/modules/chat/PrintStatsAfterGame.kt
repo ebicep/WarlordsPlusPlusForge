@@ -36,7 +36,7 @@ object PrintStatsAfterGame {
             event is WarlordsPlayerEvents.HealingGivenEvent
         ) {
             val abilityStat: AbilityStat = abilityStats.computeIfAbsent(event.ability) { AbilityStat() }
-            abilityStat.timesUsed++
+            abilityStat.timesProcd++
             if (event.isCrit) {
                 abilityStat.crits++
             }
@@ -169,14 +169,14 @@ object PrintStatsAfterGame {
     }
 
     data class AbilityStat(
-        var timesUsed: Int = 0,
+        var timesProcd: Int = 0,
         var crits: Int = 0
     ) {
         fun getCritChance(): Double {
             if (crits == 0) {
                 return 0.0
             }
-            return crits / timesUsed.toDouble()
+            return crits / timesProcd.toDouble()
         }
     }
 }
