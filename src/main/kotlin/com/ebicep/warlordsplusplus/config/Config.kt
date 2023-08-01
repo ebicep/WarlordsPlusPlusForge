@@ -22,6 +22,9 @@ object Config {
     // renderer
     lateinit var renderPlayerInfo: ForgeConfigSpec.BooleanValue
 
+    // chat
+    lateinit var printStatsAfterGame: ForgeConfigSpec.BooleanValue
+
     // values that need to be updated, runs every 10 seconds to prevent spam saving
     val delayedUpdates: HashMap<Any, () -> Unit> = HashMap()
 
@@ -54,6 +57,10 @@ object Config {
 
         builder.push("Renderer")
         renderPlayerInfo = builder.define("renderPlayerInfo", true)
+        builder.pop()
+
+        builder.push("Chat")
+        printStatsAfterGame = builder.define("printStatsAfterGame", true)
     }
 
 }

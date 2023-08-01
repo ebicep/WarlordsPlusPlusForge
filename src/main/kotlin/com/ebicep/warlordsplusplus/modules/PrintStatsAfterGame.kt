@@ -1,6 +1,7 @@
 package com.ebicep.warlordsplusplus.modules
 
 import com.ebicep.warlordsplusplus.MODID
+import com.ebicep.warlordsplusplus.config.ConfigChatGui
 import com.ebicep.warlordsplusplus.detectors.GameEndDetector
 import com.ebicep.warlordsplusplus.events.WarlordsGameEvents
 import com.ebicep.warlordsplusplus.game.OtherWarlordsPlayer
@@ -22,6 +23,9 @@ object PrintStatsAfterGame {
 
     @SubscribeEvent
     fun onGameEnd(event: WarlordsGameEvents.GameEndEvent) {
+        if (!ConfigChatGui.printPlayerStatsAfterGame.get()) {
+            return
+        }
         Minecraft.getInstance().player!!.sendSystemMessage(Component.empty())
         printScoreboardStats()
     }

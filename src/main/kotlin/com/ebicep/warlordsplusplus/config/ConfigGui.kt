@@ -29,17 +29,24 @@ class ConfigGui(private val lastScreen: Screen?) : Screen(Component.translatable
                 .bounds(i, k, 250, 20)
                 .build()
         )
-//        k += 24
-//        addRenderableWidget(
-//            Button.builder(Component.translatable("chatPlus.chatKeyBinds")) {
-//                val keyBindsScreen = KeyBindsScreen(this, minecraft!!.options)
-//                minecraft!!.setScreen(keyBindsScreen)
-//                keyBindsScreen.keyBindsList.scrollAmount = keyBindsScreen.keyBindsList.maxScroll.toDouble() + 1
-//            }
-//                .tooltip(Tooltip.create(Component.translatable("chatPlus.chatKeyBinds.tooltip")))
-//                .bounds(i, k, 250, 20)
-//                .build()
-//        )
+        k += 24
+        addRenderableWidget(
+            Button.builder(Component.translatable("warlordsplusplus.config.renderer.title")) {
+                minecraft!!.setScreen(ConfigRendererGui(this))
+            }
+                .tooltip(Tooltip.create(Component.translatable("warlordsplusplus.config.renderer.title.tooltip")))
+                .bounds(i, k, 250, 20)
+                .build()
+        )
+        k += 24
+        addRenderableWidget(
+            Button.builder(Component.translatable("warlordsplusplus.config.chat.title")) {
+                minecraft!!.setScreen(ConfigChatGui(this))
+            }
+                .tooltip(Tooltip.create(Component.translatable("warlordsplusplus.config.chat.title.tooltip")))
+                .bounds(i, k, 250, 20)
+                .build()
+        )
 
 
         k += 24 * 3

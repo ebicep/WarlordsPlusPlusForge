@@ -8,11 +8,11 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 
-class ConfigRendererGui(private val lastScreen: Screen?) : Screen(Component.translatable("warlordsplusplus.config.renderer.title")) {
+class ConfigChatGui(private val lastScreen: Screen?) : Screen(Component.translatable("warlordsplusplus.config.chat.title")) {
 
     companion object {
-        val renderPlayerInfo: OptionInstance<Boolean> =
-            ConfigUtils.createBooleanOption("warlordsplusplus.config.renderer.renderPlayerInfo", Config.renderPlayerInfo)
+        val printPlayerStatsAfterGame: OptionInstance<Boolean> =
+            ConfigUtils.createBooleanOption("warlordsplusplus.config.chat.printStatsAfterGame", Config.renderPlayerInfo)
     }
 
     private lateinit var list: OptionsList
@@ -26,7 +26,7 @@ class ConfigRendererGui(private val lastScreen: Screen?) : Screen(Component.tran
         )
         this.list.addSmall(
             arrayOf(
-                renderPlayerInfo
+                printPlayerStatsAfterGame
             )
         )
 
