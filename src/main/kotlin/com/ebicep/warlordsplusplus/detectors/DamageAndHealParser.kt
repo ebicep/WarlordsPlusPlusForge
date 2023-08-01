@@ -26,22 +26,42 @@ object DamageAndHealParser : ChatParser {
             }
 
             var otherPlayer: String
+            var ability: String = ""
             val amount = getDamageOrHealthValue(msg)
             val isCrit = msg.contains("!")
 
             if (msg.contains(SOMEBODY_DID)) {
-                otherPlayer = fun(): String {
-                    return when {
-                        //PLAYER's ability hit you
-                        msg.contains("Your") && msg.contains("you") -> Minecraft.getInstance().player!!.name.string
-                        msg.contains("'s") -> msg.substring(2, msg.indexOf("'s"))
-                        //You took 500 dmg (revenant)
-                        msg.contains("You took") -> "EXTERNAL"
-                        //PLAYER hit you for
-                        msg.contains("hit") -> msg.substring(2, msg.indexOf(" hit"))
-                        else -> "UNDEFINED"
+                //Your Water Bolt healed you for
+                when {
+                    msg.contains("Your") && msg.contains("you") -> {
+                        otherPlayer = Minecraft.getInstance().player!!.name.string
+                        //Water Bolt healed
+                        val front: String = msg.substring(msg.indexOf("Your") + 5, msg.indexOf("you") - 1)
+                        ability = front.substring(0, front.lastIndexOf(" ") - 1)
                     }
-                }()
+                    //PLAYER's ability hit you
+                    msg.contains("'s") -> {
+                        otherPlayer = msg.substring(2, msg.indexOf("'s"))
+                        val hitIndex: Int = msg.indexOf(" hit")
+                        val gaveIndex: Int = msg.indexOf(" gave")
+                        val endIndex: Int = if (hitIndex != -1) hitIndex else gaveIndex
+                        //TODO check others
+                        ability = msg.substring(msg.indexOf("'s") + 3, endIndex)
+                    }
+                    //You took 500 dmg (revenant)
+                    msg.contains("You took") -> {
+                        otherPlayer = "EXTERNAL"
+                    }
+                    //PLAYER hit you for (melee)
+                    msg.contains("hit") -> {
+                        otherPlayer = msg.substring(2, msg.indexOf(" hit"))
+                        ability = "melee"
+                    }
+
+                    else -> {
+                        otherPlayer = "UNDEFINED"
+                    }
+                }
                 when {
                     msg.contains("health") -> {
                         FORGE_BUS.post(
@@ -49,7 +69,7 @@ object DamageAndHealParser : ChatParser {
                                 amount,
                                 otherPlayer,
                                 isCrit,
-                                ability = ""
+                                ability = ability
                             )
                         )
                     }
@@ -60,7 +80,7 @@ object DamageAndHealParser : ChatParser {
                                 amount,
                                 otherPlayer,
                                 isCrit,
-                                ability = ""
+                                ability = ability
                             )
                         )
                         //Player lost Energy from otherPlayer's Avenger's Strike
@@ -68,7 +88,8 @@ object DamageAndHealParser : ChatParser {
                             FORGE_BUS.post(
                                 WarlordsPlayerEvents.EnergyLostEvent(
                                     6,
-                                    otherPlayer
+                                    otherPlayer,
+                                    ability = "Avenger's Strike"
                                 )
                             )
                     }
@@ -79,7 +100,7 @@ object DamageAndHealParser : ChatParser {
                             WarlordsPlayerEvents.EnergyReceivedEvent(
                                 amount,
                                 otherPlayer,
-                                ability = ""
+                                ability = ability
                             )
                         )
                     }
@@ -87,38 +108,42 @@ object DamageAndHealParser : ChatParser {
 
             } else if (msg.contains(YOU_DID)) {
                 when {
+                    //Your ABILITY healed PLAYER for
                     msg.contains("health") && !msg.contains("you") -> {
                         otherPlayer = msg.substring(msg.indexOf("healed ") + 7, msg.indexOf("for") - 1)
+                        ability = msg.substring(msg.indexOf("Your") + 5, msg.indexOf("healed") - 1)
                         FORGE_BUS.post(
                             WarlordsPlayerEvents.HealingGivenEvent(
                                 amount,
                                 otherPlayer,
                                 isCrit,
-                                ability = ""
+                                ability = ability
                             )
                         )
                     }
-
+                    //Your ABILITY healed you for
                     msg.contains("health") -> {
                         otherPlayer = Minecraft.getInstance().player!!.name.string
+                        ability = msg.substring(msg.indexOf("Your") + 5, msg.indexOf("healed") - 1)
                         FORGE_BUS.post(
                             WarlordsPlayerEvents.HealingGivenEvent(
                                 amount,
                                 otherPlayer,
                                 isCrit,
-                                ability = ""
+                                ability = ability
                             )
                         )
                     }
-
+                    //Your ABILITY hit PLAYER for X damage
                     msg.contains("damage") -> {
                         otherPlayer = msg.substring(msg.indexOf("hit ") + 4, msg.indexOf("for") - 1)
+                        ability = msg.substring(msg.indexOf("Your") + 5, msg.indexOf("hit") - 1)
                         FORGE_BUS.post(
                             WarlordsPlayerEvents.DamageDoneEvent(
                                 amount,
                                 otherPlayer,
                                 isCrit,
-                                ability = ""
+                                ability = ability
                             )
                         )
                         //Player's Avenger's Strike stole energy from otherPlayer
@@ -126,30 +151,33 @@ object DamageAndHealParser : ChatParser {
                             FORGE_BUS.post(
                                 WarlordsPlayerEvents.EnergyStolenEvent(
                                     6,
-                                    otherPlayer
+                                    otherPlayer,
+                                    ability = "Avenger's Strike"
                                 )
                             )
                     }
-
+                    //Your ABILITY gave PLAYER X energy
                     msg.contains("energy") -> {
                         otherPlayer = msg.substring(msg.indexOf("gave") + 5, msg.indexOf("energy") - 4)
+                        ability = msg.substring(msg.indexOf("Your") + 5, msg.indexOf("gave") - 1)
                         FORGE_BUS.post(
                             WarlordsPlayerEvents.EnergyGivenEvent(
                                 amount,
                                 otherPlayer,
-                                ability = ""
+                                ability = ability
                             )
                         )
                     }
-
+                    //Your ABILTIY was absorbed by PLAYER
                     msg.contains("absorbed") -> {
                         otherPlayer = msg.substring(msg.indexOf("by") + 3)
+                        ability = msg.substring(msg.indexOf("Your") + 5, msg.indexOf("was") - 1)
                         FORGE_BUS.post(
                             WarlordsPlayerEvents.DamageAbsorbedEvent(
                                 amount,
                                 otherPlayer,
                                 isCrit,
-                                ability = ""
+                                ability = ability
                             )
                         )
                     }

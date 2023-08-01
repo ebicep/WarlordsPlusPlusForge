@@ -67,7 +67,7 @@ object WarlordsPlayerEvents {
         override val player: String,
         override val isCrit: Boolean = false,
         override val isAbsorbed: Boolean = false,
-        override val ability: String = "",
+        override val ability: String,
     ) : AbstractDamageHealEnergyEvent()
 
     data class EnergyLostEvent(

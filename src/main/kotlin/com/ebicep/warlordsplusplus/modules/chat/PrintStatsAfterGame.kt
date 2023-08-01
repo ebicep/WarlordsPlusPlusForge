@@ -35,6 +35,9 @@ object PrintStatsAfterGame {
         if (event is WarlordsPlayerEvents.DamageDoneEvent ||
             event is WarlordsPlayerEvents.HealingGivenEvent
         ) {
+            if (event.ability == "") {
+                return
+            }
             val abilityStat: AbilityStat = abilityStats.computeIfAbsent(event.ability) { AbilityStat() }
             abilityStat.timesProcd++
             if (event.isCrit) {
