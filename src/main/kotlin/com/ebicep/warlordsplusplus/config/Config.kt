@@ -1,6 +1,7 @@
 package com.ebicep.warlordsplusplus.config
 
 import net.minecraftforge.common.ForgeConfigSpec
+import java.util.*
 import kotlin.concurrent.fixedRateTimer
 
 object Config {
@@ -8,6 +9,7 @@ object Config {
     val GENERAL_SPEC: ForgeConfigSpec
     lateinit var enabled: ForgeConfigSpec.BooleanValue
 
+    // scoreboard
     lateinit var scoreboardEnabled: ForgeConfigSpec.BooleanValue
     lateinit var scaleCTFTDM: ForgeConfigSpec.ConfigValue<Double>
     lateinit var scaleDOM: ForgeConfigSpec.ConfigValue<Double>
@@ -16,6 +18,9 @@ object Config {
     lateinit var showDiedToYouStoleKill: ForgeConfigSpec.BooleanValue
     lateinit var showDoneAndReceived: ForgeConfigSpec.BooleanValue
     lateinit var splitScoreBoard: ForgeConfigSpec.BooleanValue
+
+    // renderer
+    lateinit var renderPlayerInfo: ForgeConfigSpec.BooleanValue
 
     // values that need to be updated, runs every 10 seconds to prevent spam saving
     val delayedUpdates: HashMap<Any, () -> Unit> = HashMap()
@@ -45,7 +50,10 @@ object Config {
         showDiedToYouStoleKill = builder.define("showDiedToYouStoleKill", false)
         showDoneAndReceived = builder.define("showDoneAndReceived", true)
         splitScoreBoard = builder.define("splitScoreBoard", false)
+        builder.pop()
 
+        builder.push("Renderer")
+        renderPlayerInfo = builder.define("renderPlayerInfo", true)
     }
 
 }

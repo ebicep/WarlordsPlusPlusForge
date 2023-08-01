@@ -1,6 +1,5 @@
 package com.ebicep.warlordsplusplus.config
 
-import net.minecraft.client.OptionInstance
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.OptionsList
@@ -8,10 +7,10 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.network.chat.Component
 
-class ConfigGeneralGui(private val lastScreen: Screen?) : Screen(Component.translatable("warlordsplusplus.config.general.title")) {
+class ConfigRendererGui(private val lastScreen: Screen?) : Screen(Component.translatable("warlordsplusplus.config.renderer.title")) {
 
     companion object {
-        val enabled: OptionInstance<Boolean> = ConfigUtils.createBooleanOption("warlordsplusplus.config.general.enabled", Config.enabled)
+        val renderPlayerInfo = ConfigUtils.createBooleanOption("warlordsplusplus.config.renderer.renderPlayerInfo", Config.renderPlayerInfo)
     }
 
     private lateinit var list: OptionsList
@@ -23,7 +22,7 @@ class ConfigGeneralGui(private val lastScreen: Screen?) : Screen(Component.trans
             height - 32,
             25
         )
-        this.list.addBig(enabled)
+        //this.list.addBig(enabled)
 
         this.addWidget(this.list)
         this.addRenderableWidget(
