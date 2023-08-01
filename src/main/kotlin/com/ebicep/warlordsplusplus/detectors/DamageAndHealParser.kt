@@ -49,8 +49,7 @@ object DamageAndHealParser : ChatParser {
                                 amount,
                                 otherPlayer,
                                 isCrit,
-                                false,
-                                GameStateManager.minute
+                                ability = ""
                             )
                         )
                     }
@@ -61,8 +60,7 @@ object DamageAndHealParser : ChatParser {
                                 amount,
                                 otherPlayer,
                                 isCrit,
-                                false,
-                                GameStateManager.minute
+                                ability = ""
                             )
                         )
                         //Player lost Energy from otherPlayer's Avenger's Strike
@@ -70,10 +68,7 @@ object DamageAndHealParser : ChatParser {
                             FORGE_BUS.post(
                                 WarlordsPlayerEvents.EnergyLostEvent(
                                     6,
-                                    otherPlayer,
-                                    isCrit = false,
-                                    isAbsorbed = false,
-                                    minute = GameStateManager.minute
+                                    otherPlayer
                                 )
                             )
                     }
@@ -84,9 +79,7 @@ object DamageAndHealParser : ChatParser {
                             WarlordsPlayerEvents.EnergyReceivedEvent(
                                 amount,
                                 otherPlayer,
-                                isCrit = false,
-                                isAbsorbed = false,
-                                minute = GameStateManager.minute
+                                ability = ""
                             )
                         )
                     }
@@ -101,8 +94,7 @@ object DamageAndHealParser : ChatParser {
                                 amount,
                                 otherPlayer,
                                 isCrit,
-                                false,
-                                GameStateManager.minute
+                                ability = ""
                             )
                         )
                     }
@@ -114,8 +106,7 @@ object DamageAndHealParser : ChatParser {
                                 amount,
                                 otherPlayer,
                                 isCrit,
-                                false,
-                                GameStateManager.minute
+                                ability = ""
                             )
                         )
                     }
@@ -126,9 +117,7 @@ object DamageAndHealParser : ChatParser {
                             WarlordsPlayerEvents.DamageDoneEvent(
                                 amount,
                                 otherPlayer,
-                                isCrit,
-                                false,
-                                GameStateManager.minute
+                                isCrit
                             )
                         )
                         //Player's Avenger's Strike stole energy from otherPlayer
@@ -136,10 +125,7 @@ object DamageAndHealParser : ChatParser {
                             FORGE_BUS.post(
                                 WarlordsPlayerEvents.EnergyStolenEvent(
                                     6,
-                                    otherPlayer,
-                                    isCrit = false,
-                                    isAbsorbed = false,
-                                    minute = GameStateManager.minute
+                                    otherPlayer
                                 )
                             )
                     }
@@ -150,9 +136,7 @@ object DamageAndHealParser : ChatParser {
                             WarlordsPlayerEvents.EnergyGivenEvent(
                                 amount,
                                 otherPlayer,
-                                isCrit = false,
-                                isAbsorbed = false,
-                                minute = GameStateManager.minute
+                                ability = ""
                             )
                         )
                     }
@@ -164,8 +148,7 @@ object DamageAndHealParser : ChatParser {
                                 amount,
                                 otherPlayer,
                                 isCrit,
-                                true,
-                                GameStateManager.minute
+                                ability = ""
                             )
                         )
                     }

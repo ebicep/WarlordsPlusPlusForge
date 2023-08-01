@@ -29,7 +29,7 @@
   "warlordsplusplus.config.chat.title": "Chat",
   "warlordsplusplus.config.chat.title.tooltip": "All things that are printed in the chat",
   "warlordsplusplus.config.chat.printAbilityStatsAfterGame": "Print Ability Stats",
-  "warlordsplusplus.config.chat.printAbilityStatsAfterGame.tooltip": "Prints stats of all used abilities (Crit Chance/Crit Multiplier) at the end of the game",
+  "warlordsplusplus.config.chat.printAbilityStatsAfterGame.tooltip": "Prints stats of all used abilities (Crit Chance) at the end of the game",
   "warlordsplusplus.config.chat.printGeneralStatsAfterGame": "Print General Stats",
   "warlordsplusplus.config.chat.printGeneralStatsAfterGame.tooltip": "Prints general stats (Damage/Healing/Energy/Deaths/...) at the end of the game",
   "warlordsplusplus.config.chat.printScoreboardStatsAfterGame": "Print Scoreboard Stats",

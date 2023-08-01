@@ -4,6 +4,7 @@ import com.ebicep.warlordsplusplus.MODID
 import com.ebicep.warlordsplusplus.config.ConfigChatGui
 import com.ebicep.warlordsplusplus.detectors.GameEndDetector
 import com.ebicep.warlordsplusplus.events.WarlordsGameEvents
+import com.ebicep.warlordsplusplus.events.WarlordsPlayerEvents
 import com.ebicep.warlordsplusplus.game.OtherWarlordsPlayer
 import com.ebicep.warlordsplusplus.game.OtherWarlordsPlayers
 import com.ebicep.warlordsplusplus.game.WarlordsPlayer
@@ -26,7 +27,21 @@ object PrintStatsAfterGame {
         get() = ConfigChatGui.printScoreboardStatsAfterGame.get()
 
     val WHITE_SPACER = Component.literal(" - ").withStyle { it.withColor(ChatFormatting.WHITE) }
+    val abilityStats: MutableMap<String, AbilityStat> = mutableMapOf<String, AbilityStat>()
     var divider = ""
+
+    @SubscribeEvent
+    fun onAbilityUse(event: WarlordsPlayerEvents.AbstractDamageHealEnergyEvent) {
+        if (event is WarlordsPlayerEvents.DamageDoneEvent ||
+            event is WarlordsPlayerEvents.HealingGivenEvent
+        ) {
+            val abilityStat: AbilityStat = abilityStats.computeIfAbsent(event.ability) { AbilityStat() }
+            abilityStat.timesUsed++
+            if (event.isCrit) {
+                abilityStat.crits++
+            }
+        }
+    }
 
     @SubscribeEvent
     fun onGameEnd(event: WarlordsGameEvents.GameEndEvent) {
@@ -153,4 +168,15 @@ object PrintStatsAfterGame {
         return component
     }
 
+    data class AbilityStat(
+        var timesUsed: Int = 0,
+        var crits: Int = 0
+    ) {
+        fun getCritChance(): Double {
+            if (crits == 0) {
+                return 0.0
+            }
+            return crits / timesUsed.toDouble()
+        }
+    }
 }
