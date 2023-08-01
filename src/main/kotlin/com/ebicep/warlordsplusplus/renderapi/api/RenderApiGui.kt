@@ -2,7 +2,7 @@ package com.ebicep.warlordsplusplus.renderapi.api
 
 import com.ebicep.warlordsplusplus.MODID
 import com.ebicep.warlordsplusplus.WarlordsPlusPlus
-import com.ebicep.warlordsplusplus.modules.WarlordsPlusPlusScoreBoard
+import com.ebicep.warlordsplusplus.modules.scoreboard.WarlordsPlusPlusScoreBoard
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent

@@ -1,4 +1,4 @@
-package com.ebicep.warlordsplusplus.modules
+package com.ebicep.warlordsplusplus.modules.chat
 
 import com.ebicep.warlordsplusplus.MODID
 import com.ebicep.warlordsplusplus.config.ConfigChatGui
@@ -18,16 +18,45 @@ import net.minecraftforge.fml.common.Mod
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 object PrintStatsAfterGame {
 
+    private val printAbilityStatsAfterGame: Boolean
+        get() = ConfigChatGui.printAbilityStatsAfterGame.get()
+    private val printGeneralStatsAfterGame: Boolean
+        get() = ConfigChatGui.printGeneralStatsAfterGame.get()
+    private val printScoreboardStatsAfterGame: Boolean
+        get() = ConfigChatGui.printScoreboardStatsAfterGame.get()
+
     val WHITE_SPACER = Component.literal(" - ").withStyle { it.withColor(ChatFormatting.WHITE) }
     var divider = ""
 
     @SubscribeEvent
     fun onGameEnd(event: WarlordsGameEvents.GameEndEvent) {
-        if (!ConfigChatGui.printPlayerStatsAfterGame.get()) {
+        val shouldPrintAnything =
+            printAbilityStatsAfterGame ||
+                    printGeneralStatsAfterGame ||
+                    printScoreboardStatsAfterGame
+        if (!shouldPrintAnything) {
             return
         }
+        if (printAbilityStatsAfterGame) {
+            printEmpty()
+            printAbilityStats()
+        }
+        if (printGeneralStatsAfterGame) {
+            printEmpty()
+            getGeneralStats()
+        }
+        if (printScoreboardStatsAfterGame) {
+            printEmpty()
+            printScoreboardStats()
+        }
+    }
+
+    private fun printEmpty() {
         Minecraft.getInstance().player!!.sendSystemMessage(Component.empty())
-        printScoreboardStats()
+    }
+
+    private fun printAbilityStats() {
+
     }
 
     private fun getGeneralStats() {
@@ -64,7 +93,7 @@ object PrintStatsAfterGame {
             )
             .append(
                 Component.literal(":")
-                .withStyle { it.withColor(ChatFormatting.WHITE) }
+                    .withStyle { it.withColor(ChatFormatting.WHITE) }
             )
             .append(Component.literal(player.deaths.toString())
                 .withStyle { it.withColor(ChatFormatting.RED) }
@@ -123,8 +152,5 @@ object PrintStatsAfterGame {
         }
         return component
     }
-
-    var printGeneralStats = false
-    var printScoreboard = false
 
 }

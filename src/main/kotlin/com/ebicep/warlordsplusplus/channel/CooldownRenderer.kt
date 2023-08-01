@@ -1,5 +1,6 @@
 package com.ebicep.warlordsplusplus.channel
 
+import com.ebicep.warlordsplusplus.config.ConfigRendererGui
 import com.ebicep.warlordsplusplus.game.GameStateManager
 import com.ebicep.warlordsplusplus.game.OtherWarlordsPlayers
 import com.ebicep.warlordsplusplus.renderapi.api.RenderApiPlayer
@@ -11,7 +12,8 @@ import net.minecraftforge.client.event.RenderPlayerEvent
 object CooldownRenderer : RenderApiPlayer() {
 
     override fun shouldRender(event: RenderPlayerEvent.Post): Boolean {
-        return GameStateManager.inWarlords2 &&
+        return ConfigRendererGui.renderPlayerInfo.get() &&
+                GameStateManager.inWarlords2 &&
                 GameStateManager.inGame &&
                 (event.entity != Minecraft.getInstance().player) &&
                 (GameStateManager.inPvE || !OtherWarlordsPlayers.playersMap.containsKey(Minecraft.getInstance().player?.scoreboardName))

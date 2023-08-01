@@ -11,8 +11,15 @@ import net.minecraft.network.chat.Component
 class ConfigChatGui(private val lastScreen: Screen?) : Screen(Component.translatable("warlordsplusplus.config.chat.title")) {
 
     companion object {
-        val printPlayerStatsAfterGame: OptionInstance<Boolean> =
-            ConfigUtils.createBooleanOption("warlordsplusplus.config.chat.printStatsAfterGame", Config.renderPlayerInfo)
+        val printAbilityStatsAfterGame: OptionInstance<Boolean> =
+            ConfigUtils.createBooleanOption("warlordsplusplus.config.chat.printAbilityStatsAfterGame", Config.printAbilityStatsAfterGame)
+        val printGeneralStatsAfterGame: OptionInstance<Boolean> =
+            ConfigUtils.createBooleanOption("warlordsplusplus.config.chat.printGeneralStatsAfterGame", Config.printGeneralStatsAfterGame)
+        val printScoreboardStatsAfterGame: OptionInstance<Boolean> =
+            ConfigUtils.createBooleanOption(
+                "warlordsplusplus.config.chat.printScoreboardStatsAfterGame",
+                Config.printScoreboardStatsAfterGame
+            )
     }
 
     private lateinit var list: OptionsList
@@ -26,7 +33,8 @@ class ConfigChatGui(private val lastScreen: Screen?) : Screen(Component.translat
         )
         this.list.addSmall(
             arrayOf(
-                printPlayerStatsAfterGame
+                printAbilityStatsAfterGame, printGeneralStatsAfterGame,
+                printScoreboardStatsAfterGame
             )
         )
 

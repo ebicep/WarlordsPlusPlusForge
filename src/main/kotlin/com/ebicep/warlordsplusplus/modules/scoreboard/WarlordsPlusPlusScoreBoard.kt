@@ -1,4 +1,4 @@
-package com.ebicep.warlordsplusplus.modules
+package com.ebicep.warlordsplusplus.modules.scoreboard
 
 import com.ebicep.warlordsplusplus.config.ConfigScoreboardGui
 import com.ebicep.warlordsplusplus.game.GameStateManager
