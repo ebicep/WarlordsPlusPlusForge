@@ -30,6 +30,8 @@ object WarlordsPlusPlusScoreBoard : RenderApiGuiOverride(VanillaGuiOverlay.PLAYE
     private val splitScoreBoard: Boolean
         get() = ConfigScoreboardGui.splitScoreBoard.get()
 
+    private val spaceBetweenSplit = 6
+
     override fun shouldRender(event: RenderGuiOverlayEvent.Pre): Boolean {
         val scoreObjective: Objective? = mc.level!!.scoreboard.getDisplayObjective(0)
         val handler: ClientPacketListener = mc.player!!.connection
@@ -119,6 +121,10 @@ object WarlordsPlusPlusScoreBoard : RenderApiGuiOverride(VanillaGuiOverlay.PLAYE
         if (!showDoneAndReceived) {
             width -= 105
         }
+        //xStart += moveScoreboard
+        if (splitScoreBoard) {
+            width = width * 2 + spaceBetweenSplit
+        }
 
         var xStart = xCenter - (width / 2)
         val yStart = 25
@@ -127,14 +133,6 @@ object WarlordsPlusPlusScoreBoard : RenderApiGuiOverride(VanillaGuiOverlay.PLAYE
             poseStack!!.scale(it.toFloat(), it.toFloat(), 1f)
             val scaleStart = (it * 100).toInt()
             xStart = (xCenter + 50 - scaleStart / 2 - ((width * scaleStart / 100 / 2)))
-        }
-
-        //xStart += moveScoreboard
-        if (splitScoreBoard) {
-            xStart -= 70
-            if (showDoneAndReceived) {
-                xStart -= 75
-            }
         }
 
         var xLevel = 2.0
@@ -191,7 +189,7 @@ object WarlordsPlusPlusScoreBoard : RenderApiGuiOverride(VanillaGuiOverlay.PLAYE
             }
             if (splitScoreBoard) {
                 poseStack {
-                    translateX(width + 5)
+                    translateX(width + spaceBetweenSplit)
                     renderRect(width, 13, Colors.DEF)
                     renderHeader()
                 }
