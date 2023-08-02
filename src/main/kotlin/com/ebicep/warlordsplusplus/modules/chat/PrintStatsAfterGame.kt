@@ -77,8 +77,62 @@ object PrintStatsAfterGame {
 
     }
 
-    private fun getGeneralStats() {
-
+    private fun getGeneralStats(): MutableComponent {
+        val players = OtherWarlordsPlayers.playersMap.values
+        val playerKills = WarlordsPlayer.kills
+        val teamKills = players.filter { it.team == WarlordsPlayer.team }.map { it.kills }.sum()
+        val killParticipation = if (playerKills == 0) 0 else (playerKills / teamKills) * 100
+        return Component.empty()
+            .withStyle { it.withColor(ChatFormatting.WHITE) }
+            .append(Component.literal("Hits: ")
+                .withStyle { it.withColor(ChatFormatting.GRAY) }
+            )
+            .append(WarlordsPlayer.hits.toString())
+            .append("  ")
+            .append(Component.literal("Energy Given: ")
+                .withStyle { it.withColor(ChatFormatting.GOLD) }
+            )
+            .append(WarlordsPlayer.energyGivenCounter.toString())
+            .append("  ")
+            .append(Component.literal("Energy Recieved: ")
+                .withStyle { it.withColor(ChatFormatting.GOLD) }
+            )
+            .append(WarlordsPlayer.energyReceivedCounter.toString())
+            .append("  ")
+            .append(Component.literal("Energy Stole: ")
+                .withStyle { it.withColor(ChatFormatting.GOLD) }
+            )
+            .append(WarlordsPlayer.energyStoleCounter.toString())
+            .append("  ")
+            .append(Component.literal("Energy Lost: ")
+                .withStyle { it.withColor(ChatFormatting.GOLD) }
+            )
+            .append(WarlordsPlayer.energyLostCounter.toString())
+            .append("\n")
+            .append(Component.literal("KP: ")
+                .withStyle { it.withColor(ChatFormatting.YELLOW) }
+            )
+            .append(killParticipation.toString())
+            .append("  ")
+            .append(Component.literal("Blue Kills: ")
+                .withStyle { it.withColor(ChatFormatting.BLUE) }
+            )
+            .append(players.filter { it.team == Team.BLUE }.map { it.kills }.sum().toString())
+            .append("  ")
+            .append(Component.literal("Red Kills: ")
+                .withStyle { it.withColor(ChatFormatting.RED) }
+            )
+            .append(players.filter { it.team == Team.RED }.map { it.kills }.sum().toString())
+            .append("\n")
+            .append(Component.literal("Healing Received: ")
+                .withStyle { it.withColor(ChatFormatting.YELLOW) }
+            )
+            .append(WarlordsPlayer.healingReceivedCounter.toString())
+            .append("  ")
+            .append(Component.literal("Damage Received: ")
+                .withStyle { it.withColor(ChatFormatting.BLUE) }
+            )
+            .append(WarlordsPlayer.damageTakenCounter.toString())
     }
 
     private fun printScoreboardStats() {

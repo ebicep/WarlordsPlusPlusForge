@@ -13,6 +13,7 @@ object HitDetector : ChatParser {
         }
         val msg: String = e.message.string
         if (msg.contains("You hit")) {
+            totalHits++
             FORGE_BUS.post(
                 WarlordsPlayerEvents.HitEvent(
                     msg.substring(msg.indexOf("hit ") + 4, msg.indexOf("for") - 1),

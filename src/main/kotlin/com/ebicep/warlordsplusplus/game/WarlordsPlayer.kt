@@ -25,17 +25,19 @@ object WarlordsPlayer {
         private set
     var energyGivenCounter = 0
         private set
-    var energyStolenCounter = 0
+    var energyStoleCounter = 0
         private set
     var energyLostCounter = 0
-        private set
-    var killParticipation = 0
         private set
 
     //minute
     //kill,death,hit,dmg,heal,dmg taken,heal received
     var minuteStat = Array(1) { IntArray(7) }
         private set
+    var kills = Int
+        get() = minuteStat[0].sum()
+    var hits = Int
+        get() = minuteStat[2].sum()
 
     var spec: Specialization = Specialization.NONE
     var superSpec: SpecType = SpecType.NONE
@@ -89,7 +91,7 @@ object WarlordsPlayer {
             }
 
             WarlordsPlayerEvents.EnergyStolenEvent::class -> {
-                energyStolenCounter += event.amount
+                energyStoleCounter += event.amount
             }
 
             WarlordsPlayerEvents.EnergyLostEvent::class -> {
